@@ -14,7 +14,6 @@
         _TwistStrength   ("Fuerza de torsión",      Float)      = 3.5
         _FuzzScale       ("Escala de pelusa",       Float)      = 60.0
         _FuzzStrength    ("Fuerza de pelusa",       Range(0,1)) = 0.35
-        _BumpStrength    ("Fuerza del relieve",     Float)      = 0.3
         _Octaves         ("Octavas del fractal",    Range(1,6)) = 3
         _Frequency       ("Frecuencia de fibras",   Float)      = 3.0
     }
@@ -42,7 +41,6 @@
             float  _TwistStrength;
             float  _FuzzScale;
             float  _FuzzStrength;
-            float  _BumpStrength;
             int    _Octaves;
             float  _Frequency;
 
@@ -193,23 +191,13 @@
                 woolColor = lerp(woolColor, _Color1.rgb * 1.15, Z * _FuzzStrength);
                 woolColor = saturate(woolColor);
 
-                // ── Normal perturbada ─────────────────────────────────
-                float eps  = 0.005;
-                float W_dx = woolFBM(uv + float2(eps, 0)) - W;
-                float W_dy = woolFBM(uv + float2(0, eps)) - W;
-
-                float3 N = normalize(f.normal_w);
-                float3 T = normalize(cross(N, float3(0, 1, 0)));
-                float3 B = normalize(cross(N, T));
-
-                float3 perturbedN = normalize(
-                    N + _BumpStrength * (W_dx * T + W_dy * B)
-                );
+                // ── Normal ───────────────────────────────────────────────────────────
+                float3 perturbedN = normalize(f.normal_w);
 
                 // ── Blinn-Phong ───────────────────────────────────────
                 float3 L = normalize(_LightPosition_w.xyz - f.position_w.xyz);
                 float3 V = normalize(_WorldSpaceCameraPos - f.position_w.xyz);
-                float3 H = (L + V) / 2.0;
+                float3 H = normalize(L + V);
 
                 float3 ambient  = _MaterialKa.rgb * _AmbientLight.rgb;
                 float3 diffuse  = woolColor * _LightIntensity.rgb * max(0.0, dot(perturbedN, L));

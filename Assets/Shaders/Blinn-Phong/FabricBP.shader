@@ -11,7 +11,6 @@
         _Color1          ("Color hilo 1",           Color)   = (0.8, 0.2, 0.1, 1)
         _Color2          ("Color hilo 2",           Color)   = (0.6, 0.1, 0.05, 1)
         _FabricScale     ("Escala de la tela",      Float)   = 10.0
-        _BumpStrength    ("Fuerza del relieve",     Float)   = 2.0
         _Octaves         ("Octavas del fractal",    Range(1,6)) = 4
         // Gabor: controlan la dirección e intensidad de las fibras
         _Frequency       ("Frecuencia de fibras",  Float)   = 6.0
@@ -38,7 +37,6 @@
             float4 _Color1;
             float4 _Color2;
             float  _FabricScale;
-            float  _BumpStrength;
             int    _Octaves;
             float  _Frequency;
             float  _Anisotropy;
@@ -198,23 +196,13 @@
                 // los hilos se cruzan y bajos en los espacios entre ellos
                 float3 fabricColor = lerp(_Color1.rgb, _Color2.rgb, G);
 
-                // ── Normal perturbada ─────────────────────────────────
-                float eps  = 0.005;
-                float G_dx = gaborFBM(uv + float2(eps, 0)) - G;
-                float G_dy = gaborFBM(uv + float2(0, eps)) - G;
-
-                float3 N = normalize(f.normal_w);
-                float3 T = normalize(cross(N, float3(0, 1, 0)));
-                float3 B = normalize(cross(N, T));
-
-                float3 perturbedN = normalize(
-                    N + _BumpStrength * (G_dx * T + G_dy * B)
-                );
+                // ── Normal ───────────────────────────────────────────────────────────
+                float3 perturbedN = normalize(f.normal_w);
 
                 // ── Blinn-Phong ───────────────────────────────────────
                 float3 L = normalize(_LightPosition_w.xyz - f.position_w.xyz);
                 float3 V = normalize(_WorldSpaceCameraPos - f.position_w.xyz);
-                float3 H = (L + V) / 2.0;
+                float3 H = normalize(L + V);
 
                 // Ambiente
                 float3 ambient  = _MaterialKa.rgb * _AmbientLight.rgb;

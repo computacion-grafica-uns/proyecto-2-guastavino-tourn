@@ -63,10 +63,7 @@
                 float3 N = normalize(f.normal_w);
                 float3 L = normalize(_LightPosition_w.xyz - f.position_w.xyz);
                 float3 V = normalize(_WorldSpaceCameraPos - f.position_w.xyz);
-
-                // en Phong  float3 R = 2.0 * N * dot(N, L) - L;
-                // podemos hacer normalize(L + V);
-                float3 H = (L + V) / 2.0;
+                float3 H = normalize(L + V);
 
                 float3 ambient = _MaterialKa.rgb * _AmbientLight.rgb;
                 
