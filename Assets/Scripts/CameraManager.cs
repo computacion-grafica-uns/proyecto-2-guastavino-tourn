@@ -4,8 +4,8 @@ public class CameraManager : MonoBehaviour
 {
     // ── Referencia a la cámara ─────────────────────────────────────
     private Camera cam;
-    [SerializeField] private Vector3 initialPosition = new Vector3(660f, 160f, 350f);
-    [SerializeField] private Vector3 initialRotation = new Vector3(0f, -100f, 0f);
+    private Vector3 initialPosition = new Vector3(110f, 0f, -200f);
+    private Vector3 initialRotation = new Vector3(0f, 0f, 0f);
 
     // ── Modo ───────────────────────────────────────────────────────
     private bool orbitalMode = false;
@@ -18,12 +18,17 @@ public class CameraManager : MonoBehaviour
     private float rotSpeed = 90f;
 
     // ── Orbital ───────────────────────────────────────────────────
-    private Vector3 orbitTarget = new Vector3(5f, 0f, 5f);
-    private float orbitDistance = 30f;
+    private Vector3 orbitTarget = new Vector3(110f, 0f, 0f);
+    private float orbitDistance = 200f;
     private float orbitYaw = 180f;
     private float orbitPitch = 30f;
     private float orbitSpeed = 80f;
     private float zoomSpeed = 15f;
+
+    // ── Orbital focus ─────────────────────────────────────────────
+    [SerializeField] private Transform[] focusTargets;
+    private bool focusMode = false;
+    private int focusIndex = 0;
 
     // ── Config cámara ─────────────────────────────────────────────
     private float fov = 60f;
@@ -33,7 +38,7 @@ public class CameraManager : MonoBehaviour
     // ── GUI ────────────────────────────────────────────────────────
     private bool showMenu = true;
     private bool showTargetUI = false;
-    private string[] orbitTargetFields = { "5", "0", "5" };
+    private string[] orbitTargetFields = { "110", "0", "0" };
 
     void Start()
     {
@@ -71,6 +76,13 @@ public class CameraManager : MonoBehaviour
         if (ctrl && Input.GetKeyDown(KeyCode.C))
             showMenu = !showMenu;
 
+        if (Input.GetKeyDown(KeyCode.O) && orbitalMode)
+        {
+            focusMode = !focusMode;
+            if (focusMode) ApplyFocusTarget(focusIndex, true);
+            else RestoreFocusTargets();
+        }
+
         if (orbitalMode) UpdateOrbital();
         else UpdateFirstPerson();
     }
@@ -91,8 +103,8 @@ public class CameraManager : MonoBehaviour
         // ── Rotación con flechas ───────────────────────────────────
         if (Input.GetKey(KeyCode.LeftArrow)) yaw -= rotSpeed * Time.deltaTime;
         if (Input.GetKey(KeyCode.RightArrow)) yaw += rotSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.UpArrow)) pitch += rotSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.DownArrow)) pitch -= rotSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.DownArrow)) pitch += rotSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.UpArrow)) pitch -= rotSpeed * Time.deltaTime;
         pitch = Mathf.Clamp(pitch, -89f, 89f);
 
         // ── Movimiento con WASD ───────────────────────────────────
@@ -127,7 +139,7 @@ public class CameraManager : MonoBehaviour
 
     void InitOrbital()
     {
-        orbitDistance = 30f;
+        orbitDistance = 200f;
         orbitYaw = 180f;
         orbitPitch = 30f;
         ApplyOrbital();
@@ -135,14 +147,19 @@ public class CameraManager : MonoBehaviour
 
     void UpdateOrbital()
     {
+        if (focusMode) UpdateFocusCycling();
+
+        bool ctrl = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+        bool blockArrowRotation = focusMode;
+
         // ── Rotar alrededor del target ────────────────────────────
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.A) || (!blockArrowRotation && Input.GetKey(KeyCode.LeftArrow)))
             orbitYaw -= orbitSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D) || (!blockArrowRotation && Input.GetKey(KeyCode.RightArrow)))
             orbitYaw += orbitSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.W) || (!blockArrowRotation && Input.GetKey(KeyCode.UpArrow)))
             orbitPitch += orbitSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.S) || (!blockArrowRotation && Input.GetKey(KeyCode.DownArrow)))
             orbitPitch -= orbitSpeed * Time.deltaTime;
 
         orbitPitch = Mathf.Clamp(orbitPitch, -89f, 89f);
@@ -153,6 +170,50 @@ public class CameraManager : MonoBehaviour
         orbitDistance = Mathf.Max(1f, orbitDistance);
 
         ApplyOrbital();
+    }
+
+    void UpdateFocusCycling()
+    {
+        if (focusTargets == null || focusTargets.Length == 0) return;
+
+        int dir = 0;
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.DownArrow)) dir = 1;
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow)) dir = -1;
+        if (dir == 0) return;
+
+        int nextIndex = (focusIndex + dir + focusTargets.Length) % focusTargets.Length;
+        ApplyFocusTarget(nextIndex, false);
+    }
+
+    void ApplyFocusTarget(int index, bool force)
+    {
+        if (focusTargets == null || focusTargets.Length == 0) return;
+
+        if (!force && index == focusIndex) return;
+        focusIndex = Mathf.Clamp(index, 0, focusTargets.Length - 1);
+
+        Transform target = focusTargets[focusIndex];
+        if (target == null) return;
+
+        orbitTarget = target.position;
+        ApplyOrbital();
+
+        for (int i = 0; i < focusTargets.Length; i++)
+        {
+            if (focusTargets[i] == null) continue;
+            focusTargets[i].gameObject.SetActive(i == focusIndex);
+        }
+    }
+
+    void RestoreFocusTargets()
+    {
+        if (focusTargets == null) return;
+
+        for (int i = 0; i < focusTargets.Length; i++)
+        {
+            if (focusTargets[i] == null) continue;
+            focusTargets[i].gameObject.SetActive(true);
+        }
     }
 
     void ApplyOrbital()
@@ -187,6 +248,10 @@ public class CameraManager : MonoBehaviour
             // ── Target ────────────────────────────────────────────────
             GUI.Label(new Rect(x, y, panelW, 24),
                 $"Target: ({orbitTarget.x:F1}, {orbitTarget.y:F1}, {orbitTarget.z:F1})");
+            y += 28f;
+
+            string focusLabel = focusMode ? "Focus: ON" : "Focus: OFF";
+            GUI.Label(new Rect(x, y, panelW, 24), focusLabel);
             y += 28f;
 
             if (GUI.Button(new Rect(x, y, 130, 24),
@@ -224,7 +289,7 @@ public class CameraManager : MonoBehaviour
             orbitSpeed = GUI.HorizontalSlider(new Rect(x, y, 180f, 20f), orbitSpeed, 10f, 300f);
             y += 28f;
 
-            GUI.Label(new Rect(x, y, panelW, 24), $"Zoom: {zoomSpeed:F1}");
+            GUI.Label(new Rect(x, y, panelW, 24), $"Velocidad Zoom: {zoomSpeed:F1}");
             y += 24f;
             zoomSpeed = GUI.HorizontalSlider(new Rect(x, y, 180f, 20f), zoomSpeed, 1f, 60f);
         }

@@ -71,15 +71,15 @@ Material:
     - _FiberScale: 80
     - _Frequency: 3
     - _FuzzScale: 60
-    - _FuzzStrength: 0.35
+    - _FuzzStrength: 0.119
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Material_n: 3
+    - _Material_n: 180
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Octaves: 6
+    - _Octaves: 5.25
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
