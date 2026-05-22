@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CeramicToonMaterial
-  m_Shader: {fileID: 4800000, guid: b0676dc4ba2e020458ec726ed64ac28b, type: 3}
+  m_Shader: {fileID: 4800000, guid: 111761cec676d744d9b6a5c21434f269, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -63,6 +63,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 1
+    - _Bands: 4.07
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1

@@ -5,8 +5,10 @@ public class CameraManager : MonoBehaviour
 {
     // ── Referencia a la cámara ─────────────────────────────────────
     private Camera cam;
-    private Vector3 initialPosition = new Vector3(110f, 0f, -200f);
+    private Vector3 initialPosition = new Vector3(0f, 0f, -200f);
     private Vector3 initialRotation = new Vector3(0f, 0f, 0f);
+    [SerializeField] private Vector3 fpOffsetFromCenter = new Vector3(0f, 0f, -200f);
+    [SerializeField] private Vector3 orbitOffsetFromCenter = new Vector3(0f, 60f, -200f);
 
     // ── Modo ───────────────────────────────────────────────────────
     private bool orbitalMode = false;
@@ -155,10 +157,7 @@ public class CameraManager : MonoBehaviour
 
     void InitOrbital()
     {
-        orbitDistance = 200f;
-        orbitYaw = 180f;
-        orbitPitch = 30f;
-        orbitTarget = orbitTargetGlobal;
+        orbitTarget = focusMode ? orbitTargetFocus : orbitTargetGlobal;
         ApplyOrbital();
     }
 
@@ -292,7 +291,19 @@ public class CameraManager : MonoBehaviour
         Transform target = focusTargets[focusIndex];
         if (target == null) return;
 
-        orbitTargetFocus = target.position;
+        Vector3 targetCenter = target.position;
+        var renderers = target.GetComponentsInChildren<Renderer>(true);
+        if (renderers.Length > 0)
+        {
+            Bounds bounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+            targetCenter = bounds.center;
+        }
+
+        orbitTargetFocus = targetCenter;
         orbitTarget = orbitTargetFocus;
         ApplyOrbital();
 
@@ -406,6 +417,34 @@ public class CameraManager : MonoBehaviour
         orbitTargetFields[1] = orbitTargetGlobal.y.ToString("F1");
         orbitTargetFields[2] = orbitTargetGlobal.z.ToString("F1");
         gridCenterInitialized = true;
+
+        UpdateInitialFromCenter(orbitTargetGlobal);
+    }
+
+    void UpdateInitialFromCenter(Vector3 center)
+    {
+        initialPosition = center + fpOffsetFromCenter;
+
+        Vector3 toCenter = center - initialPosition;
+        if (toCenter.sqrMagnitude > 0.0001f)
+            initialRotation = Quaternion.LookRotation(toCenter, Vector3.up).eulerAngles;
+
+        if (!orbitalMode)
+        {
+            fpPos = initialPosition;
+            yaw = initialRotation.y;
+            pitch = initialRotation.x;
+            ApplyFirstPerson();
+        }
+
+        float orbitDistanceLocal = orbitOffsetFromCenter.magnitude;
+        if (orbitDistanceLocal > 0.001f)
+        {
+            orbitDistance = orbitDistanceLocal;
+            Vector3 dir = orbitOffsetFromCenter / orbitDistanceLocal;
+            orbitPitch = Mathf.Asin(Mathf.Clamp(dir.y, -1f, 1f)) * Mathf.Rad2Deg;
+            orbitYaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        }
 
         if (!focusMode)
         {

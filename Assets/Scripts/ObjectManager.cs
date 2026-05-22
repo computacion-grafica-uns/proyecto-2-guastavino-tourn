@@ -39,7 +39,7 @@ public class ObjectManager : MonoBehaviour
         {
             for (int c = 0; c < columns; c++)
             {
-                Vector3 pos = start + new Vector3(c * spacing.x, r * spacing.y, 0f);
+                Vector3 pos = start + new Vector3(c * spacing.x, - r * spacing.y, 0f);
                 var instance = Instantiate(teapotPrefab, pos, Quaternion.identity, transform);
                 instance.transform.localScale = teapotScale;
                 instance.name = $"Teapot_{x[c]}_{y[r]}";
