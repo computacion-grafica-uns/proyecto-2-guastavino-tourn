@@ -2,6 +2,7 @@
 {
     Properties
     {
+        _AmbientLight    ("Ambient Light",           Color)  = (1,1,1,1)
          _MaterialKa      ("Material Ka",            Vector)     = (0.3,0.3,0.3,0)
         _MaterialKs      ("Material Ks",            Vector)     = (0.02,0.02,0.02,0)
         _Material_n      ("Material n (brillo)",    Float)      = 3
