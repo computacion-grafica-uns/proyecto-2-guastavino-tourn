@@ -545,15 +545,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1598e4f521de94a4fa50cde79a6b0c07, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1598e4f521de94a4fa50cde79a6b0c07, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1598e4f521de94a4fa50cde79a6b0c07, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1598e4f521de94a4fa50cde79a6b0c07, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1581,8 +1581,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80efe9f7521f83b4d9e30d5c87de296b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialPosition: {x: 660, y: 160, z: 350}
-  initialRotation: {x: 0, y: -100, z: 0}
   focusTargets: []
 --- !u!4 &1969226422
 Transform:
@@ -1603,12 +1601,12 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 224517098}
+  - {fileID: 1600745225}
   - {fileID: 1403233588}
   - {fileID: 1202097134}
-  - {fileID: 1227182218}
   - {fileID: 156952786}
-  - {fileID: 1600745225}
+  - {fileID: 1227182218}
+  - {fileID: 224517098}
   - {fileID: 163642339}
   - {fileID: 22016915}
   - {fileID: 1690764384}

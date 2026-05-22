@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
@@ -18,7 +19,9 @@ public class CameraManager : MonoBehaviour
     private float rotSpeed = 90f;
 
     // ── Orbital ───────────────────────────────────────────────────
-    private Vector3 orbitTarget = new Vector3(110f, 0f, 0f);
+    private Vector3 orbitTargetGlobal = new Vector3(110f, 0f, 0f);
+    private Vector3 orbitTargetFocus = new Vector3(110f, 0f, 0f);
+    private Vector3 orbitTarget;
     private float orbitDistance = 200f;
     private float orbitYaw = 180f;
     private float orbitPitch = 30f;
@@ -78,6 +81,9 @@ public class CameraManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.O) && orbitalMode)
         {
+            EnsureFocusTargets();
+            if (focusTargets == null || focusTargets.Length == 0) return;
+
             focusMode = !focusMode;
             if (focusMode) ApplyFocusTarget(focusIndex, true);
             else RestoreFocusTargets();
@@ -142,6 +148,7 @@ public class CameraManager : MonoBehaviour
         orbitDistance = 200f;
         orbitYaw = 180f;
         orbitPitch = 30f;
+        orbitTarget = orbitTargetGlobal;
         ApplyOrbital();
     }
 
@@ -195,7 +202,8 @@ public class CameraManager : MonoBehaviour
         Transform target = focusTargets[focusIndex];
         if (target == null) return;
 
-        orbitTarget = target.position;
+        orbitTargetFocus = target.position;
+        orbitTarget = orbitTargetFocus;
         ApplyOrbital();
 
         for (int i = 0; i < focusTargets.Length; i++)
@@ -214,6 +222,33 @@ public class CameraManager : MonoBehaviour
             if (focusTargets[i] == null) continue;
             focusTargets[i].gameObject.SetActive(true);
         }
+
+        orbitTarget = orbitTargetGlobal;
+        ApplyOrbital();
+    }
+
+    void EnsureFocusTargets()
+    {
+        if (focusTargets != null && focusTargets.Length > 0) return;
+
+        var renderers = FindObjectsOfType<Renderer>(true);
+        var unique = new HashSet<Transform>();
+        var list = new List<Transform>();
+
+        foreach (var renderer in renderers)
+        {
+            if (renderer == null) continue;
+            Transform root = renderer.transform.root;
+            if (root == null) continue;
+            if (root == transform) continue;
+
+            if (unique.Add(root)) list.Add(root);
+        }
+
+        focusTargets = list.ToArray();
+
+        if (focusTargets.Length == 0)
+            Debug.LogWarning("CameraManager: no se encontraron objetos para focus.");
     }
 
     void ApplyOrbital()
@@ -276,7 +311,8 @@ public class CameraManager : MonoBehaviour
                         float.TryParse(orbitTargetFields[1], out float ty) &&
                         float.TryParse(orbitTargetFields[2], out float tz))
                     {
-                        orbitTarget = new Vector3(tx, ty, tz);
+                        orbitTargetGlobal = new Vector3(tx, ty, tz);
+                        orbitTarget = orbitTargetGlobal;
                         ApplyOrbital();
                     }
                 }
