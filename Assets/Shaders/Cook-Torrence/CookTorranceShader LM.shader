@@ -8,10 +8,12 @@
         _F0              ("F0 (reflectancia base)", Color)      = (0.04,0.04,0.04,1)
         _Roughness       ("Roughness",              Range(0,1)) = 0.5
 
-        [Space]
+         [Space]
         [Header(Metodos)]
+        // 0 = Blinn       | 1 = Beckmann    | 2 = GGX
         [IntRange] _DMethod ("D: 0=Blinn  1=Beckmann  2=GGX", Range(0,2)) = 0
-        [IntRange] _GMethod ("G: 0=SmithGGX  1=SmithBeckmann", Range(0,1)) = 0
+        // 0 = Smith-GGX | 1 = Smith-Beckmann
+        [IntRange] _GMethod ("G: 0=SmithGGX  1=SmithBeckmann ", Range(0,1)) = 0
     }
     SubShader
     {
@@ -54,17 +56,13 @@
                 return output;
             }
 
-            // ═══════════════════════════════════════════════════════
-            // F — FRESNEL
-            // ═══════════════════════════════════════════════════════
+            // Schlick 1994
             float3 F_Schlick(float3 F0, float VdotH)
             {
                 return F0 + (1.0 - F0) * pow(1.0 - VdotH, 5.0);
             }
 
-            // ═══════════════════════════════════════════════════════
-            // D — NORMAL DISTRIBUTION FUNCTION
-            // ═══════════════════════════════════════════════════════
+            // GGX
             float D_GGX(float NdotH, float roughness)
             {
                 float a  = roughness * roughness;
@@ -73,6 +71,7 @@
                 return a2 / (UNITY_PI * d * d);
             }
 
+            // Beckmann
             float D_Beckmann(float NdotH, float roughness)
             {
                 float a2     = max(roughness * roughness * roughness * roughness, 0.00001);
@@ -81,6 +80,7 @@
                 return exp(exponent) / (UNITY_PI * a2 * NdotH2 * NdotH2);
             }
 
+            // Blinn
             float D_Blinn(float NdotH, float roughness)
             {
                 float a2 = roughness * roughness * roughness * roughness;
@@ -95,9 +95,7 @@
                 return D_Blinn(NdotH, roughness);
             }
 
-            // ═══════════════════════════════════════════════════════
-            // G — GEOMETRY TERM
-            // ═══════════════════════════════════════════════════════
+            // Smith-Schlick-GGX
             float G1_SchlickGGX(float NdotX, float roughness)
             {
                 float a = roughness * roughness;
@@ -111,6 +109,7 @@
                      * G1_SchlickGGX(NdotV, roughness);
             }
 
+            // Smith-Beckmann
             float G1_Beckmann(float NdotX, float roughness)
             {
                 float a = roughness * roughness;
@@ -118,7 +117,9 @@
                 float tanTheta = sqrt(max(0.0, 1.0 - NdotX2)) / max(NdotX, 0.0001);
                 float c = 1.0 / (a * tanTheta + 0.0001);
 
-                if (c >= 1.6) return 1.0;
+                if (c >= 1.6)
+                    return 1.0;
+
                 return (3.535 * c + 2.181 * c * c)
                      / (1.0 + 2.276 * c + 2.577 * c * c);
             }
@@ -135,34 +136,31 @@
                 return G_SmithGGX(NdotL, NdotV, roughness);
             }
 
-            // ═══════════════════════════════════════════════════════
-            // Cook-Torrance acumulado para una luz
-            // ═══════════════════════════════════════════════════════
             void AccumulateCT(
-                float3 N, float3 V, float3 L, float3 lightColor,
+                float3 N, float3 V, float3 L,
+                float3 lightColor,
                 float3 Kd, float3 F0, float roughness,
                 inout float3 totalDiffuse, inout float3 totalSpecular)
             {
                 float3 H = normalize(L + V);
+
                 float NdotL = max(0.0, dot(N, L));
                 float NdotV = max(0.0, dot(N, V));
                 float NdotH = max(0.0, dot(N, H));
                 float VdotH = max(0.0, dot(V, H));
 
-                // Difuso lambertiano normalizado
+                if (NdotL <= 0.0) return;
+
                 totalDiffuse += (Kd / UNITY_PI) * lightColor * NdotL;
 
-                // Especular F·D·G / (4·NdotL·NdotV)
                 float3 F = F_Schlick(F0, VdotH);
                 float  D = D_select(NdotH, roughness);
                 float  G = G_select(NdotL, NdotV, roughness);
+
                 float  denom = 4.0 * max(NdotL * NdotV, 0.001);
-                totalSpecular += (F * D * G / denom) * lightColor;
+                totalSpecular += (F * D * G / denom) * lightColor * NdotL;
             }
 
-            // ═══════════════════════════════════════════════════════
-            // FRAGMENT
-            // ═══════════════════════════════════════════════════════
             fixed4 fragmentShader(v2f f) : SV_Target
             {
                 float3 N = normalize(f.normal_w);
@@ -187,8 +185,8 @@
                 AccumulateCT(N, V, L, lightColor,
                     _MaterialKd.rgb, _F0.rgb, roughness,
                     totalDiffuse, totalSpecular);
-
-                float3 ambient = _MaterialKa.rgb * _AmbientLight.rgb;
+                    
+                float3 ambient = _MaterialKa.rgb * _AmbientLight.rgb * _MaterialKd.rgb;
 
                 fixed4 fragColor;
                 fragColor.rgb = ambient + totalDiffuse + totalSpecular;

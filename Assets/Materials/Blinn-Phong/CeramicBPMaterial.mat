@@ -70,7 +70,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Material_n: 50
+    - _Material_n: 150
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -88,5 +88,5 @@ Material:
     - _LightPosition_w: {r: 500, g: 5, b: 100, a: 0}
     - _MaterialKa: {r: 0.19125, g: 0.0735, b: 0.0225, a: 1}
     - _MaterialKd: {r: 0.7038, g: 0.27048, b: 0.0828, a: 1}
-    - _MaterialKs: {r: 0.25677, g: 0.13762, b: 0.086014, a: 1}
+    - _MaterialKs: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

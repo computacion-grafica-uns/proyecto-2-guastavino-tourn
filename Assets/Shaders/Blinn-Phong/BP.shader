@@ -2,8 +2,6 @@
 {
     Properties
     {
-        _LightIntensity  ("Light Intensity",         Color)  = (1,1,1,1)
-        _LightPosition_w ("Light Position (World)",  Vector) = (0,5,0,1)
         _AmbientLight    ("Ambient Light",           Color)  = (1,1,1,1)
         _MaterialKa      ("Material Ka",             Vector) = (0.2,0.2,0.2,0)
         _MaterialKd      ("Material Kd",             Vector) = (0.6,0.6,0.6,0)

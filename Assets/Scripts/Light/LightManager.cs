@@ -58,8 +58,8 @@ public class LightManager : MonoBehaviour
         // Spot
         var sGO = new GameObject("Spot Light");
         sGO.transform.SetParent(transform);
-        sGO.transform.position = new Vector3(400f, 0f, -25f);
-        sGO.transform.rotation = Quaternion.Euler(320f, 330f, 0f);
+        sGO.transform.position = new Vector3(110, 0f, -500f);
+        sGO.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         spotLight = sGO.AddComponent<Light>();
         spotLight.type = LightType.Spot;
         spotLight.color = Color.yellow;
@@ -227,7 +227,7 @@ public class LightManager : MonoBehaviour
 
                 float newAngle = GUI.HorizontalSlider(
                     new Rect(x, y, 200f, 20f),
-                    spotAngle, 1f, 179f);
+                    spotAngle, 0f, 180f);
                 y += 28f;
 
                 if (!Mathf.Approximately(newAngle, spotAngle))

@@ -38,7 +38,7 @@ LightResult BlinnPhongLight(
 
     // si shininess es 0 no hay especular
     float spec = (shininess > 0.0) ? pow(NdotH, shininess) : 0.0;
-    r.specular = Ks * lightColor * spec * (NdotL > 0.0 ? 1.0 : 0.0);
+    r.specular = Ks * lightColor * spec;
 
     return r;
 }
