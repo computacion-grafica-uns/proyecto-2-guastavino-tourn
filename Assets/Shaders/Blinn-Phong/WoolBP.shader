@@ -2,9 +2,6 @@
 {
     Properties
     {
-        _LightIntensity  ("Light Intensity",        Color)      = (1,1,1,1)
-        _LightPosition_w ("Light Position (World)", Vector)     = (0,5,0,1)
-        _AmbientLight    ("Ambient Light",          Color)      = (0.15,0.15,0.15,1)
         _MaterialKa      ("Material Ka",            Vector)     = (0.3,0.3,0.3,0)
         _MaterialKs      ("Material Ks",            Vector)     = (0.02,0.02,0.02,0)
         _Material_n      ("Material n (brillo)",    Float)      = 3
@@ -28,11 +25,10 @@
             #pragma vertex vertexShader
             #pragma fragment fragmentShader
             #include "UnityCG.cginc"
+            #include "../LightingGlobals.cginc" 
 
-            float4 _LightIntensity;
-            float4 _LightPosition_w;
-            float4 _AmbientLight;
             float4 _MaterialKa;
+            float4 _AmbientLight;
             float4 _MaterialKs;
             float  _Material_n;
             float4 _Color1;
@@ -103,11 +99,6 @@
             }
 
             // ── Wool fBM ──────────────────────────────────────────────
-            // A diferencia de la tela (2 direcciones iguales), la lana usa:
-            //   - Una dirección dominante (hilo corre en una dirección)
-            //   - La dirección se ROTA según la posición UV → efecto de torsión
-            //     Cada punto del hilo tiene la fibra levemente girada respecto
-            //     al anterior, como en un hilo retorcido real.
             float woolFBM(float2 uv)
             {
                 float value     = 0.0;
@@ -179,33 +170,44 @@
             {
                 float2 uv = f.uv * _WoolScale;
 
-                // Patrón base del hilo retorcido
+                // ── Patrón de lana ────────────────────────────────────────
                 float W = woolFBM(uv);
-
-                // Capa de pelusa encima
                 float Z = fuzzNoise(f.uv);
 
-                // El color mezcla el patrón del hilo con la pelusa
-                // La pelusa aclara levemente el color base (fibras sueltas capturan más luz)
                 float3 woolColor = lerp(_Color1.rgb, _Color2.rgb, W);
                 woolColor = lerp(woolColor, _Color1.rgb * 1.15, Z * _FuzzStrength);
                 woolColor = saturate(woolColor);
 
-                // ── Normal ───────────────────────────────────────────────────────────
-                float3 perturbedN = normalize(f.normal_w);
-
-                // ── Blinn-Phong ───────────────────────────────────────
-                float3 L = normalize(_LightPosition_w.xyz - f.position_w.xyz);
+                // ── Vectores base ─────────────────────────────────────────
+                float3 N = normalize(f.normal_w);
                 float3 V = normalize(_WorldSpaceCameraPos - f.position_w.xyz);
-                float3 H = normalize(L + V);
 
-                float3 ambient  = _MaterialKa.rgb * _AmbientLight.rgb;
-                float3 diffuse  = woolColor * _LightIntensity.rgb * max(0.0, dot(perturbedN, L));
-                float3 specular = _MaterialKs.rgb * _LightIntensity.rgb
-                                  * pow(max(0.0, dot(perturbedN, H)), _Material_n);
+                // ── Acumulación de las 3 luces ────────────────────────────
+                float3 totalDiffuse  = float3(0, 0, 0);
+                float3 totalSpecular = float3(0, 0, 0);
+
+                float3 L, lightColor;
+                LightResult r;
+
+                GetDirLight(L, lightColor);
+                r = BlinnPhongLight(N, V, L, lightColor, woolColor, _MaterialKs.rgb, _Material_n);
+                totalDiffuse  += r.diffuse;
+                totalSpecular += r.specular;
+
+                GetPointLight(f.position_w.xyz, L, lightColor);
+                r = BlinnPhongLight(N, V, L, lightColor, woolColor, _MaterialKs.rgb, _Material_n);
+                totalDiffuse  += r.diffuse;
+                totalSpecular += r.specular;
+
+                GetSpotLight(f.position_w.xyz, L, lightColor);
+                r = BlinnPhongLight(N, V, L, lightColor, woolColor, _MaterialKs.rgb, _Material_n);
+                totalDiffuse  += r.diffuse;
+                totalSpecular += r.specular;
+
+                float3 ambient = _MaterialKa.rgb * _AmbientLight.rgb;
 
                 fixed4 fragColor;
-                fragColor.rgb = ambient + diffuse + specular;
+                fragColor.rgb = ambient + totalDiffuse + totalSpecular;
                 fragColor.a   = 1.0;
                 return fragColor;
             }

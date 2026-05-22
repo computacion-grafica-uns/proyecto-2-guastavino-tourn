@@ -1,98 +1,244 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    private Vector3 pos = new Vector3(5, 1, -10);
-    private bool orbitalMode = false;
-    private float orbitDistance = 30f;
-    private float orbitYaw = 0f;
-    private float orbitPitch = 30f;
-    private Vector3 orbitTarget = new Vector3(5f, 0f, 5f);
+    // ── Referencia a la cámara ─────────────────────────────────────
+    private Camera cam;
+    [SerializeField] private Vector3 initialPosition = new Vector3(660f, 160f, 350f);
+    [SerializeField] private Vector3 initialRotation = new Vector3(0f, -100f, 0f);
 
-    private float cameraSpeed = 6f;
-    private float orbitSpeed = 2f;
+    // ── Modo ───────────────────────────────────────────────────────
+    private bool orbitalMode = false;
+
+    // ── Primera persona ───────────────────────────────────────────
+    private Vector3 fpPos;
     private float yaw = 0f;
     private float pitch = 0f;
+    private float fpSpeed = 100f;
+    private float rotSpeed = 90f;
+
+    // ── Orbital ───────────────────────────────────────────────────
+    private Vector3 orbitTarget = new Vector3(5f, 0f, 5f);
+    private float orbitDistance = 30f;
+    private float orbitYaw = 180f;
+    private float orbitPitch = 30f;
+    private float orbitSpeed = 80f;
+    private float zoomSpeed = 15f;
+
+    // ── Config cámara ─────────────────────────────────────────────
+    private float fov = 60f;
+    private float nearClip = 0.1f;
+    private float farClip = 1000f;
+
+    // ── GUI ────────────────────────────────────────────────────────
+    private bool showMenu = true;
+    private bool showTargetUI = false;
+    private string[] orbitTargetFields = { "5", "0", "5" };
 
     void Start()
     {
-        
+        // Crear GameObject con Camera
+        var go = new GameObject("MainCamera");
+        go.tag = "MainCamera";
+        cam = go.AddComponent<Camera>();
+
+        cam.clearFlags = CameraClearFlags.SolidColor;
+        cam.backgroundColor = new Color(0.1f, 0.1f, 0.1f);
+        cam.fieldOfView = fov;
+        cam.nearClipPlane = nearClip;
+        cam.farClipPlane = farClip;
+        cam.transform.position = initialPosition;
+        cam.transform.rotation = Quaternion.Euler(initialRotation);
+
+        fpPos = initialPosition;
+        // Agregar AudioListener para evitar warnings de Unity
+        go.AddComponent<AudioListener>();
+
+        InitFirstPerson();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             orbitalMode = !orbitalMode;
+            if (orbitalMode) InitOrbital();
+            else InitFirstPerson();
         }
 
-        if (orbitalMode)
-            UpdateOrbital();
-        else
-            UpdateFirstPerson();
+        bool ctrl = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+        if (ctrl && Input.GetKeyDown(KeyCode.C))
+            showMenu = !showMenu;
+
+        if (orbitalMode) UpdateOrbital();
+        else UpdateFirstPerson();
     }
 
-
-    private void UpdateOrbital()
+    void InitFirstPerson()
     {
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) orbitYaw += orbitSpeed * 50f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) orbitYaw -= orbitSpeed * 50f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) orbitPitch += orbitSpeed * 50f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) orbitPitch -= orbitSpeed * 50f * Time.deltaTime;
+        fpPos = cam.transform.position;
 
-        if (Input.GetKey(KeyCode.Space)) orbitDistance -= cameraSpeed * 2f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.LeftShift)) orbitDistance += cameraSpeed * 2f * Time.deltaTime;
+        Vector3 euler = cam.transform.eulerAngles;
 
+        yaw = euler.y;
+        pitch = euler.x;
+
+        ApplyFirstPerson();
+    }
+    void UpdateFirstPerson()
+    {
+        // ── Rotación con flechas ───────────────────────────────────
+        if (Input.GetKey(KeyCode.LeftArrow)) yaw -= rotSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.RightArrow)) yaw += rotSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.UpArrow)) pitch += rotSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.DownArrow)) pitch -= rotSpeed * Time.deltaTime;
+        pitch = Mathf.Clamp(pitch, -89f, 89f);
+
+        // ── Movimiento con WASD ───────────────────────────────────
+        var rot = Quaternion.Euler(pitch, yaw, 0f);
+        Vector3 forward = rot * Vector3.forward;
+        Vector3 right = rot * Vector3.right;
+
+        // Movimiento en plano horizontal (sin pitch para WASD)
+        Vector3 flatForward = new Vector3(forward.x, 0f, forward.z).normalized;
+        Vector3 moveDir = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.W)) moveDir += flatForward;
+        if (Input.GetKey(KeyCode.S)) moveDir -= flatForward;
+        if (Input.GetKey(KeyCode.A)) moveDir -= right;
+        if (Input.GetKey(KeyCode.D)) moveDir += right;
+
+        // Subir / bajar
+        if (Input.GetKey(KeyCode.Space)) moveDir += Vector3.up;
+        if (Input.GetKey(KeyCode.LeftShift)) moveDir -= Vector3.up;
+
+        if (moveDir != Vector3.zero)
+            fpPos += moveDir.normalized * fpSpeed * Time.deltaTime;
+
+        ApplyFirstPerson();
+    }
+
+    void ApplyFirstPerson()
+    {
+        cam.transform.position = fpPos;
+        cam.transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
+    }
+
+    void InitOrbital()
+    {
+        orbitDistance = 30f;
+        orbitYaw = 180f;
+        orbitPitch = 30f;
+        ApplyOrbital();
+    }
+
+    void UpdateOrbital()
+    {
+        // ── Rotar alrededor del target ────────────────────────────
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            orbitYaw -= orbitSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            orbitYaw += orbitSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            orbitPitch += orbitSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            orbitPitch -= orbitSpeed * Time.deltaTime;
+
+        orbitPitch = Mathf.Clamp(orbitPitch, -89f, 89f);
+
+        // ── Zoom ──────────────────────────────────────────────────
+        if (Input.GetKey(KeyCode.Space)) orbitDistance -= zoomSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.LeftShift)) orbitDistance += zoomSpeed * Time.deltaTime;
+        orbitDistance = Mathf.Max(1f, orbitDistance);
+
+        ApplyOrbital();
+    }
+
+    void ApplyOrbital()
+    {
         float pitchRad = orbitPitch * Mathf.Deg2Rad;
         float yawRad = orbitYaw * Mathf.Deg2Rad;
 
-        pos = orbitTarget + new Vector3(
+        Vector3 offset = new Vector3(
             Mathf.Cos(pitchRad) * Mathf.Sin(yawRad),
             Mathf.Sin(pitchRad),
             Mathf.Cos(pitchRad) * Mathf.Cos(yawRad)
         ) * orbitDistance;
 
-        transform.position = pos;
-        transform.LookAt(orbitTarget);
+        cam.transform.position = orbitTarget + offset;
+        cam.transform.LookAt(orbitTarget, Vector3.up);
     }
-    private void UpdateFirstPerson()
+
+    void OnGUI()
     {
-        float rotateHorizontal = 0f;
-        float rotateVertical = 0f;
+        float panelW = 240f;
+        float x = Screen.width - panelW - 10f;   // margen de 10 px del borde derecho
 
-        if (Input.GetKey(KeyCode.LeftArrow)) rotateHorizontal = -1f;
-        if (Input.GetKey(KeyCode.RightArrow)) rotateHorizontal = 1f;
-        if (Input.GetKey(KeyCode.UpArrow)) rotateVertical = -1f;
-        if (Input.GetKey(KeyCode.DownArrow)) rotateVertical = +1f;
+        string modeLabel = orbitalMode ? "Modo: Orbital" : "Modo: Primera persona";
+        GUI.Label(new Rect(x, 10, panelW, 24), modeLabel);
 
-        float rotationSpeed = 80f;
+        if (!showMenu) return;
 
-        yaw += rotateHorizontal * rotationSpeed * Time.deltaTime;
-        pitch += rotateVertical * rotationSpeed * Time.deltaTime;
+        float y = 60f;
 
-        pitch = Mathf.Clamp(pitch, -89f, 89f);
+        if (orbitalMode)
+        {
+            // ── Target ────────────────────────────────────────────────
+            GUI.Label(new Rect(x, y, panelW, 24),
+                $"Target: ({orbitTarget.x:F1}, {orbitTarget.y:F1}, {orbitTarget.z:F1})");
+            y += 28f;
 
-        Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
+            if (GUI.Button(new Rect(x, y, 130, 24),
+                showTargetUI ? "▲ Cambiar target" : "▼ Cambiar target"))
+                showTargetUI = !showTargetUI;
+            y += 28f;
 
-        Vector3 forward = rotation * Vector3.forward;
-        Vector3 right = rotation * Vector3.right;
+            if (showTargetUI)
+            {
+                string[] axes = { "X", "Y", "Z" };
+                for (int i = 0; i < 3; i++)
+                {
+                    GUI.Label(new Rect(x, y, 16f, 24f), axes[i]);
+                    orbitTargetFields[i] = GUI.TextField(
+                        new Rect(x + 18f, y, 80f, 24f), orbitTargetFields[i]);
+                    y += 28f;
+                }
 
-        Vector3 moveDir = Vector3.zero;
+                if (GUI.Button(new Rect(x, y, 80, 24), "Aplicar"))
+                {
+                    if (float.TryParse(orbitTargetFields[0], out float tx) &&
+                        float.TryParse(orbitTargetFields[1], out float ty) &&
+                        float.TryParse(orbitTargetFields[2], out float tz))
+                    {
+                        orbitTarget = new Vector3(tx, ty, tz);
+                        ApplyOrbital();
+                    }
+                }
+                y += 32f;
+            }
 
-        if (Input.GetKey(KeyCode.W)) moveDir += forward;
-        if (Input.GetKey(KeyCode.S)) moveDir -= forward;
-        if (Input.GetKey(KeyCode.A)) moveDir -= right;
-        if (Input.GetKey(KeyCode.D)) moveDir += right;
+            // ── Velocidades orbital ───────────────────────────────────
+            GUI.Label(new Rect(x, y, panelW, 24), $"Velocidad orbital: {orbitSpeed:F0}");
+            y += 24f;
+            orbitSpeed = GUI.HorizontalSlider(new Rect(x, y, 180f, 20f), orbitSpeed, 10f, 300f);
+            y += 28f;
 
-        if (Input.GetKey(KeyCode.Space)) moveDir += Vector3.up;
-        if (Input.GetKey(KeyCode.LeftShift)) moveDir -= Vector3.up;
+            GUI.Label(new Rect(x, y, panelW, 24), $"Zoom: {zoomSpeed:F1}");
+            y += 24f;
+            zoomSpeed = GUI.HorizontalSlider(new Rect(x, y, 180f, 20f), zoomSpeed, 1f, 60f);
+        }
+        else
+        {
+            // ── Velocidades primera persona ───────────────────────────
+            GUI.Label(new Rect(x, y, panelW, 24), $"Velocidad movimiento: {fpSpeed:F1}");
+            y += 24f;
+            fpSpeed = GUI.HorizontalSlider(new Rect(x, y, 180f, 20f), fpSpeed, 1f, 300f);
+            y += 28f;
 
-        pos += moveDir.normalized * cameraSpeed * Time.deltaTime;
-
-        transform.position = pos;
-        transform.rotation = rotation;
+            GUI.Label(new Rect(x, y, panelW, 24), $"Velocidad rotación: {rotSpeed:F0}");
+            y += 24f;
+            rotSpeed = GUI.HorizontalSlider(new Rect(x, y, 180f, 20f), rotSpeed, 10f, 360f);
+        }
     }
 }
