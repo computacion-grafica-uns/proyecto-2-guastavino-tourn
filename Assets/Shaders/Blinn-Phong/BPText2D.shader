@@ -3,8 +3,6 @@
     Properties
     {
         _MainTex         ("Textura 2D",             2D)          = "white" {}
-        _LightIntensity  ("Light Intensity",         Color)  = (1,1,1,1)
-        _LightPosition_w ("Light Position (World)",  Vector) = (0,5,0,1)
         _AmbientLight    ("Ambient Light",           Color)  = (1,1,1,1)
         _MaterialKa      ("Material Ka",             Vector) = (0.2,0.2,0.2,0)
         _MaterialKd      ("Material Kd",             Vector) = (0.6,0.6,0.6,0)
@@ -22,11 +20,10 @@
             #pragma vertex vertexShader
             #pragma fragment fragmentShader
             #include "UnityCG.cginc"
+            #include "..\LightingGlobals.cginc"
 
             sampler2D _MainTex;
-            float4    _MainTex_ST;  
-            float4 _LightIntensity;
-            float4 _LightPosition_w;
+            float4    _MainTex_ST;
             float4 _AmbientLight;
             float4 _MaterialKa;
             float4 _MaterialKd;
@@ -62,18 +59,33 @@
             {
                 float3 texColor = tex2D(_MainTex, f.uv).rgb;
                 float3 N = normalize(f.normal_w);
-                float3 L = normalize(_LightPosition_w.xyz - f.position_w.xyz);
                 float3 V = normalize(_WorldSpaceCameraPos - f.position_w.xyz);
-                float3 H = normalize(L + V);
+
+                float3 totalDiffuse  = float3(0, 0, 0);
+                float3 totalSpecular = float3(0, 0, 0);
+
+                float3 L, lightColor;
+                LightResult r;
+
+                GetDirLight(L, lightColor);
+                r = BlinnPhongLight(N, V, L, lightColor, texColor * _MaterialKd.rgb, _MaterialKs.rgb, _Material_n);
+                totalDiffuse  += r.diffuse;
+                totalSpecular += r.specular;
+
+                GetPointLight(f.position_w.xyz, L, lightColor);
+                r = BlinnPhongLight(N, V, L, lightColor, texColor * _MaterialKd.rgb, _MaterialKs.rgb, _Material_n);
+                totalDiffuse  += r.diffuse;
+                totalSpecular += r.specular;
+
+                GetSpotLight(f.position_w.xyz, L, lightColor);
+                r = BlinnPhongLight(N, V, L, lightColor, texColor * _MaterialKd.rgb, _MaterialKs.rgb, _Material_n);
+                totalDiffuse  += r.diffuse;
+                totalSpecular += r.specular;
 
                 float3 ambient = _MaterialKa.rgb * _AmbientLight.rgb * texColor;
-                
-                float3 diffuse = texColor * _MaterialKd.rgb * _LightIntensity.rgb * max(0.0, dot(N, L));
-
-                float3 specular = _MaterialKs.rgb * _LightIntensity.rgb * pow(max(0.0, dot(N, H)), _Material_n);
 
                 fixed4 fragColor;
-                fragColor.rgb = ambient + diffuse + specular;
+                fragColor.rgb = ambient + totalDiffuse + totalSpecular;
                 fragColor.a   = 1.0;
                 return fragColor;
             }

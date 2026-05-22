@@ -10,7 +10,7 @@
         _MaterialKs      ("Material Ks",             Vector) = (1,1,1,0)
         _Material_n      ("Material n (brillo)",     Float)  = 32
         _Alpha           ("Alpha (transparencia)",  Range(0,1)) = 1.0
-        [Toggle] _ZWrite ("ZWrite (opaco=1)",       Float)       = 1  //Para la transparencia del vidrio
+        [Toggle] _ZWrite ("ZWrite (opaco=1)",       Float)       = 1
     }
 
     SubShader
@@ -26,9 +26,8 @@
             #pragma vertex vertexShader
             #pragma fragment fragmentShader
             #include "UnityCG.cginc"
+            #include "../LightingGlobals.cginc"
 
-            float4 _LightIntensity;
-            float4 _LightPosition_w;
             float4 _AmbientLight;
             float4 _MaterialKa;
             float4 _MaterialKd;
@@ -61,18 +60,33 @@
             fixed4 fragmentShader(v2f f) : SV_Target
             {
                 float3 N = normalize(f.normal_w);
-                float3 L = normalize(_LightPosition_w.xyz - f.position_w.xyz);
                 float3 V = normalize(_WorldSpaceCameraPos - f.position_w.xyz);
-                float3 H = normalize(L + V);
+
+                float3 totalDiffuse  = float3(0, 0, 0);
+                float3 totalSpecular = float3(0, 0, 0);
+
+                float3 L, lightColor;
+                LightResult r;
+
+                GetDirLight(L, lightColor);
+                r = BlinnPhongLight(N, V, L, lightColor, _MaterialKd.rgb, _MaterialKs.rgb, _Material_n);
+                totalDiffuse  += r.diffuse;
+                totalSpecular += r.specular;
+
+                GetPointLight(f.position_w.xyz, L, lightColor);
+                r = BlinnPhongLight(N, V, L, lightColor, _MaterialKd.rgb, _MaterialKs.rgb, _Material_n);
+                totalDiffuse  += r.diffuse;
+                totalSpecular += r.specular;
+
+                GetSpotLight(f.position_w.xyz, L, lightColor);
+                r = BlinnPhongLight(N, V, L, lightColor, _MaterialKd.rgb, _MaterialKs.rgb, _Material_n);
+                totalDiffuse  += r.diffuse;
+                totalSpecular += r.specular;
 
                 float3 ambient = _MaterialKa.rgb * _AmbientLight.rgb;
-                
-                float3 diffuse = _MaterialKd.rgb * _LightIntensity.rgb * max(0.0, dot(N, L));
-
-                float3 specular = _MaterialKs.rgb * _LightIntensity.rgb * pow(max(0.0, dot(N, H)), _Material_n);
 
                 fixed4 fragColor;
-                fragColor.rgb = ambient + diffuse + specular;
+                fragColor.rgb = ambient + totalDiffuse + totalSpecular;
                 fragColor.a   = _Alpha;
                 return fragColor;
             }

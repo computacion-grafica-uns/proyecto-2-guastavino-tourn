@@ -10,6 +10,7 @@ public class LightManager : MonoBehaviour
     private bool[] showPos = new bool[3];
     private bool[] showColor = new bool[3];
     private bool[] showRot = new bool[3];
+    private float spotAngle = 60f;
     private string[][] rotFields = new string[3][];
 
     private string[][] posFields = new string[3][];
@@ -64,7 +65,7 @@ public class LightManager : MonoBehaviour
         spotLight.color = Color.yellow;
         spotLight.intensity = 1f;
         spotLight.range = 5000f;
-        spotLight.spotAngle = 60f;
+        spotAngle = spotLight.spotAngle = 60f;
     }
 
     void SyncFieldsFromLights()
@@ -105,7 +106,6 @@ public class LightManager : MonoBehaviour
     void PushToShaders()
     {
         // ── Direccional ──────────────────────────────────────────
-        // La luz direccional no tiene posición, solo dirección
         Vector3 dir = dirLight.transform.forward;
         Shader.SetGlobalVector("_DirLightDir", new Vector4(dir.x, dir.y, dir.z, 0f));
         Color c = dirLight.color * dirLight.intensity;
@@ -215,6 +215,25 @@ public class LightManager : MonoBehaviour
                     if (GUI.Button(new Rect(x, y, 80f, 22f), "Aplicar"))
                         ApplyRotation(i, l);
                     y += 28f;
+                }
+            }
+
+            // ── Spot Angle (solo para Spot) ───────────────────────────
+            if (l.type == LightType.Spot)
+            {
+                GUI.Label(new Rect(x, y, 220f, 22f),
+                    $"Spot Angle: {spotAngle:F1}°");
+                y += 24f;
+
+                float newAngle = GUI.HorizontalSlider(
+                    new Rect(x, y, 200f, 20f),
+                    spotAngle, 1f, 179f);
+                y += 28f;
+
+                if (!Mathf.Approximately(newAngle, spotAngle))
+                {
+                    spotAngle = newAngle;
+                    spotLight.spotAngle = spotAngle;
                 }
             }
 
