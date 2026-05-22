@@ -31,8 +31,15 @@ LightResult BlinnPhongLight(
 {
     LightResult r;
     float3 H = normalize(L + V);
-    r.diffuse = Kd * lightColor * max(0.0, dot(N, L));
-    r.specular = Ks * lightColor * pow(max(0.0, dot(N, H)), shininess);
+    float NdotL = max(0.0, dot(N, L));
+    float NdotH = max(0.0, dot(N, H));
+
+    r.diffuse = Kd * lightColor * NdotL;
+
+    // si shininess es 0 no hay especular
+    float spec = (shininess > 0.0) ? pow(NdotH, shininess) : 0.0;
+    r.specular = Ks * lightColor * spec * (NdotL > 0.0 ? 1.0 : 0.0);
+
     return r;
 }
 
