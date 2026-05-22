@@ -30,8 +30,12 @@ public class CameraManager : MonoBehaviour
 
     // ── Orbital focus ─────────────────────────────────────────────
     [SerializeField] private Transform[] focusTargets;
+    [SerializeField] private ObjectManager objectManager;
     private bool focusMode = false;
     private int focusIndex = 0;
+    private int focusRow = 0;
+    private int focusColumn = 0;
+    private bool gridCenterInitialized = false;
 
     // ── Config cámara ─────────────────────────────────────────────
     private float fov = 60f;
@@ -45,6 +49,8 @@ public class CameraManager : MonoBehaviour
 
     void Start()
     {
+        TryResolveObjectManager();
+
         // Crear GameObject con Camera
         var go = new GameObject("MainCamera");
         go.tag = "MainCamera";
@@ -62,12 +68,16 @@ public class CameraManager : MonoBehaviour
         // Agregar AudioListener para evitar warnings de Unity
         go.AddComponent<AudioListener>();
 
+        TrySetGridCenterTarget();
         InitFirstPerson();
     }
 
 
     void Update()
     {
+        if (!gridCenterInitialized)
+            TrySetGridCenterTarget();
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             orbitalMode = !orbitalMode;
@@ -183,13 +193,82 @@ public class CameraManager : MonoBehaviour
     {
         if (focusTargets == null || focusTargets.Length == 0) return;
 
+        int rows = objectManager != null ? objectManager.Rows : 0;
+        int columns = objectManager != null ? objectManager.Columns : 0;
+        bool hasGrid = rows > 0 && columns > 0;
+
+        if (hasGrid && focusTargets.Length != rows * columns)
+        {
+            focusTargets = objectManager.GetTeapotTransforms();
+            if (focusTargets.Length == 0) return;
+        }
+
+        bool moved = false;
+        int newRow = focusRow;
+        int newColumn = focusColumn;
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            newRow = hasGrid ? (focusRow - 1 + rows) % rows : focusRow;
+            moved = true;
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            newRow = hasGrid ? (focusRow + 1) % rows : focusRow;
+            moved = true;
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            if (hasGrid)
+            {
+                if (focusColumn == 0)
+                {
+                    newRow = (focusRow - 1 + rows) % rows;
+                    newColumn = columns - 1;
+                }
+                else
+                {
+                    newColumn = focusColumn - 1;
+                }
+            }
+            moved = true;
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (hasGrid)
+            {
+                if (focusColumn == columns - 1)
+                {
+                    newRow = (focusRow + 1) % rows;
+                    newColumn = 0;
+                }
+                else
+                {
+                    newColumn = focusColumn + 1;
+                }
+            }
+            moved = true;
+        }
+
+        if (!moved) return;
+
+        focusRow = newRow;
+        focusColumn = newColumn;
+
+        if (hasGrid)
+        {
+            int nextIndex = (focusRow * columns) + focusColumn;
+            ApplyFocusTarget(nextIndex, false);
+            return;
+        }
+
         int dir = 0;
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.DownArrow)) dir = 1;
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow)) dir = -1;
         if (dir == 0) return;
 
-        int nextIndex = (focusIndex + dir + focusTargets.Length) % focusTargets.Length;
-        ApplyFocusTarget(nextIndex, false);
+        int fallbackIndex = (focusIndex + dir + focusTargets.Length) % focusTargets.Length;
+        ApplyFocusTarget(fallbackIndex, false);
     }
 
     void ApplyFocusTarget(int index, bool force)
@@ -198,6 +277,17 @@ public class CameraManager : MonoBehaviour
 
         if (!force && index == focusIndex) return;
         focusIndex = Mathf.Clamp(index, 0, focusTargets.Length - 1);
+
+        if (objectManager != null)
+        {
+            int rows = objectManager.Rows;
+            int columns = objectManager.Columns;
+            if (rows > 0 && columns > 0)
+            {
+                focusRow = focusIndex / columns;
+                focusColumn = focusIndex % columns;
+            }
+        }
 
         Transform target = focusTargets[focusIndex];
         if (target == null) return;
@@ -230,6 +320,21 @@ public class CameraManager : MonoBehaviour
     void EnsureFocusTargets()
     {
         if (focusTargets != null && focusTargets.Length > 0) return;
+
+        TryResolveObjectManager();
+
+        if (objectManager != null)
+        {
+            focusTargets = objectManager.GetTeapotTransforms();
+            if (focusTargets.Length > 0)
+            {
+                int columns = objectManager.Columns;
+                focusIndex = Mathf.Clamp(focusIndex, 0, focusTargets.Length - 1);
+                focusRow = columns > 0 ? focusIndex / columns : 0;
+                focusColumn = columns > 0 ? focusIndex % columns : 0;
+                return;
+            }
+        }
 
         var renderers = FindObjectsOfType<Renderer>(true);
         var unique = new HashSet<Transform>();
@@ -264,6 +369,49 @@ public class CameraManager : MonoBehaviour
 
         cam.transform.position = orbitTarget + offset;
         cam.transform.LookAt(orbitTarget, Vector3.up);
+    }
+
+    void TryResolveObjectManager()
+    {
+        if (objectManager != null) return;
+        objectManager = FindObjectOfType<ObjectManager>();
+    }
+
+    void TrySetGridCenterTarget()
+    {
+        if (objectManager == null) return;
+
+        var targets = objectManager.GetTeapotTransforms();
+        if (targets == null || targets.Length == 0) return;
+
+        Transform first = null;
+        for (int i = 0; i < targets.Length; i++)
+        {
+            if (targets[i] == null) continue;
+            first = targets[i];
+            break;
+        }
+
+        if (first == null) return;
+
+        Bounds bounds = new Bounds(first.position, Vector3.zero);
+        for (int i = 0; i < targets.Length; i++)
+        {
+            if (targets[i] == null) continue;
+            bounds.Encapsulate(targets[i].position);
+        }
+
+        orbitTargetGlobal = bounds.center;
+        orbitTargetFields[0] = orbitTargetGlobal.x.ToString("F1");
+        orbitTargetFields[1] = orbitTargetGlobal.y.ToString("F1");
+        orbitTargetFields[2] = orbitTargetGlobal.z.ToString("F1");
+        gridCenterInitialized = true;
+
+        if (!focusMode)
+        {
+            orbitTarget = orbitTargetGlobal;
+            if (orbitalMode) ApplyOrbital();
+        }
     }
 
     void OnGUI()
