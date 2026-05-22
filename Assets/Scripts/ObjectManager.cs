@@ -1,14 +1,18 @@
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
 
 public class ObjectManager : MonoBehaviour
 {
-    
     private int rows = 3;
     private int columns = 6;
     private Vector3 spacing = new Vector3(90f, 60f, 0f);
     public GameObject teapotPrefab;
     public Vector3 teapotScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+    [Header("Materiales por fila")]
+    public Material[] blinnPhongMaterials;
+    public Material[] cookTorranceMaterials;
+    public Material[] toonMaterials;
+
     private Transform[,] teapotGrid;
 
     public int Rows => rows;
@@ -35,12 +39,52 @@ public class ObjectManager : MonoBehaviour
         {
             for (int c = 0; c < columns; c++)
             {
-                Vector3 pos = start + new Vector3(c * spacing.x,r * spacing.y, 0f);
+                Vector3 pos = start + new Vector3(c * spacing.x, r * spacing.y, 0f);
                 var instance = Instantiate(teapotPrefab, pos, Quaternion.identity, transform);
                 instance.transform.localScale = teapotScale;
                 instance.name = $"Teapot_{x[c]}_{y[r]}";
                 teapotGrid[r, c] = instance.transform;
+
+                Material material = GetMaterialForCell(r, c);
+                ApplyMaterial(instance, material, r, c);
             }
+        }
+    }
+
+    Material GetMaterialForCell(int row, int column)
+    {
+        Material[] rowMaterials = null;
+        switch (row)
+        {
+            case 0:
+                rowMaterials = blinnPhongMaterials;
+                break;
+            case 1:
+                rowMaterials = cookTorranceMaterials;
+                break;
+            case 2:
+                rowMaterials = toonMaterials;
+                break;
+        }
+
+        if (rowMaterials == null || rowMaterials.Length == 0) return null;
+        if (column < 0 || column >= rowMaterials.Length) return null;
+        return rowMaterials[column];
+    }
+
+    void ApplyMaterial(GameObject instance, Material material, int row, int column)
+    {
+        if (instance == null) return;
+        if (material == null)
+        {
+            Debug.LogWarning($"ObjectManager: missing material for row {row}, column {column}.");
+            return;
+        }
+
+        var renderers = instance.GetComponentsInChildren<Renderer>(true);
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].sharedMaterial = material;
         }
     }
 

@@ -26,7 +26,7 @@ public class CameraManager : MonoBehaviour
     private float orbitYaw = 180f;
     private float orbitPitch = 30f;
     private float orbitSpeed = 80f;
-    private float zoomSpeed = 15f;
+    private float zoomSpeed = 60f;
 
     // ── Orbital focus ─────────────────────────────────────────────
     [SerializeField] private Transform[] focusTargets;
@@ -475,7 +475,7 @@ public class CameraManager : MonoBehaviour
 
             GUI.Label(new Rect(x, y, panelW, 24), $"Velocidad Zoom: {zoomSpeed:F1}");
             y += 24f;
-            zoomSpeed = GUI.HorizontalSlider(new Rect(x, y, 180f, 20f), zoomSpeed, 1f, 60f);
+            zoomSpeed = GUI.HorizontalSlider(new Rect(x, y, 180f, 20f), zoomSpeed, 50f, 200f);
         }
         else
         {
