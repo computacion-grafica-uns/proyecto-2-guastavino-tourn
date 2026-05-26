@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: GlassCTMaterial
-  m_Shader: {fileID: 4800000, guid: b0676dc4ba2e020458ec726ed64ac28b, type: 3}
+  m_Shader: {fileID: 4800000, guid: c9558ce37e3f7024bb4a7efbcb2f52c8, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -64,8 +64,10 @@ Material:
     - _Alpha: 0.8
     - _BumpScale: 1
     - _Cutoff: 0.5
+    - _DMethod: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _GMethod: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -74,6 +76,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Roughness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -83,6 +86,7 @@ Material:
     - _AmbientLight: {r: 0.6, g: 0.6, b: 0.6, a: 0.6}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _F0: {r: 0.04, g: 0.04, b: 0.04, a: 1}
     - _LightIntensity: {r: 1, g: 1, b: 1, a: 1}
     - _LightPosition_w: {r: 500, g: 0, b: 100, a: 1}
     - _MaterialKa: {r: 0.04, g: 0.05, b: 0.06, a: 0}

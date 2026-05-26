@@ -77,7 +77,7 @@ public class ObjectManager : MonoBehaviour
         if (instance == null) return;
         if (material == null)
         {
-            Debug.LogWarning($"ObjectManager: missing material for row {row}, column {column}.");
+            Debug.LogWarning($"ObjectManager: missing material for row {row}, column {column} in object {instance}.");
             return;
         }
 

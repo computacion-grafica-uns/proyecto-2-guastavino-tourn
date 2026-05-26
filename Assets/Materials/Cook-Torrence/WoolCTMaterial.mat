@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WoolCTMaterial
-  m_Shader: {fileID: 4800000, guid: 943d81b353f805344b7baa0983361f14, type: 3}
+  m_Shader: {fileID: 4800000, guid: 83d4ebccade720148a37aa22b0518804, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -68,6 +68,7 @@ Material:
     - _BumpScale: 1
     - _BumpStrength: 0.3
     - _Cutoff: 0.5
+    - _DMethod: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _FabricScale: 3
@@ -75,6 +76,7 @@ Material:
     - _Frequency: 3
     - _FuzzScale: 60
     - _FuzzStrength: 0.119
+    - _GMethod: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -84,6 +86,7 @@ Material:
     - _OcclusionStrength: 1
     - _Octaves: 5.25
     - _Parallax: 0.02
+    - _Roughness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -98,6 +101,7 @@ Material:
     - _Color1: {r: 0.8, g: 0.22, b: 0.1, a: 1}
     - _Color2: {r: 0.45, g: 0.1, b: 0.05, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _F0: {r: 0.04, g: 0.04, b: 0.04, a: 1}
     - _LightIntensity: {r: 1, g: 1, b: 1, a: 1}
     - _LightPosition_w: {r: 500, g: 0, b: 0, a: 1}
     - _MaterialKa: {r: 0.3, g: 0.3, b: 0.3, a: 0}

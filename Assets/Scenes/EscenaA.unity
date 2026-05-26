@@ -231,7 +231,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: e2e7bd13fba427949b13143247f8b9b3, type: 2}
   - {fileID: 2100000, guid: a63875edfbcb8b24e9e079849ab5d727, type: 2}
   - {fileID: 2100000, guid: 69cd38137f2999a4cbd3a71e4b4db70a, type: 2}
-  - {fileID: 2100000, guid: 29c7267f3d395b941b584e38d7d7f425, type: 2}
+  - {fileID: 2100000, guid: f6c74b747d826b84ebffd597a72fb85c, type: 2}
   - {fileID: 2100000, guid: 67043d6296352ac49ae5b8aaf85dbe40, type: 2}
 --- !u!1001 &926157540
 PrefabInstance:
@@ -255,7 +255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c48b4d17d1b59214ca12b7e433b3f495, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -100
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c48b4d17d1b59214ca12b7e433b3f495, type: 3}
       propertyPath: m_LocalPosition.y
@@ -335,6 +335,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80efe9f7521f83b4d9e30d5c87de296b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fpOffsetFromCenter: {x: 0, y: 0, z: -200}
+  orbitOffsetFromCenter: {x: 0, y: 60, z: -200}
   focusTargets: []
   objectManager: {fileID: 0}
 --- !u!4 &1969226422
