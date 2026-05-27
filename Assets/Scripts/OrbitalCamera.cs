@@ -1,10 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Controla la cámara en modo orbital con soporte de focus por objeto.
-/// No crea ni destruye la cámara; recibe la referencia desde CameraManager.
-/// </summary>
 public class OrbitalCamera : MonoBehaviour
 {
     // ── Config ─────────────────────────────────────────────────────

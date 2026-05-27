@@ -62,7 +62,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 0.8
-    - _Bands: 3
+    - _Bands: 1.46
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
