@@ -262,10 +262,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80efe9f7521f83b4d9e30d5c87de296b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  absoluteInitialPosition: {x: 0, y: 0, z: -200}
+  initialOrbitTarget: {x: 110, y: 0, z: 0}
   fpOffsetFromCenter: {x: 0, y: 0, z: -200}
   orbitOffsetFromCenter: {x: 0, y: 60, z: -200}
   focusTargets: []
   objectManager: {fileID: 0}
+  initialFPMoveSpeed: 150
+  initialFPRotSpeed: 90
+  initialOrbitSpeed: 80
+  initialOrbitZoomSpeed: 60
+  initialGlobalOrbitDistance: 200
+  initialFocusDistance: 100
 --- !u!4 &1969226422
 Transform:
   m_ObjectHideFlags: 0

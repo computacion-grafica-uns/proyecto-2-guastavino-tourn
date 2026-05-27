@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WoolToonMaterial
-  m_Shader: {fileID: 4800000, guid: 943d81b353f805344b7baa0983361f14, type: 3}
+  m_Shader: {fileID: 4800000, guid: 786706875ba603e488d7229f6344f126, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -93,14 +93,14 @@ Material:
     - _WoolScale: 18
     - _ZWrite: 1
     m_Colors:
-    - _AmbientLight: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _AmbientLight: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color1: {r: 0.8, g: 0.22, b: 0.1, a: 1}
     - _Color2: {r: 0.45, g: 0.1, b: 0.05, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LightIntensity: {r: 1, g: 1, b: 1, a: 1}
     - _LightPosition_w: {r: 500, g: 0, b: 0, a: 1}
-    - _MaterialKa: {r: 0.3, g: 0.3, b: 0.3, a: 0}
+    - _MaterialKa: {r: 1, g: 1, b: 1, a: 0}
     - _MaterialKd: {r: 0, g: 0, b: 0, a: 0}
     - _MaterialKs: {r: 0.02, g: 0.02, b: 0.02, a: 0}
   m_BuildTextureStacks: []

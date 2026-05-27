@@ -12,10 +12,23 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
     // ── Inspector ──────────────────────────────────────────────────
-    [SerializeField] private Vector3 fpOffsetFromCenter     = new Vector3(  0f,  0f, -200f);
-    [SerializeField] private Vector3 orbitOffsetFromCenter  = new Vector3(  0f, 60f, -200f);
+    [Header("Posiciones y offsets iniciales")]
+    [SerializeField] private Vector3 absoluteInitialPosition = new Vector3(0f, 0f, -200f);
+    [SerializeField] private Vector3 initialOrbitTarget      = new Vector3(110f, 0f, 0f);
+    [SerializeField] private Vector3 fpOffsetFromCenter      = new Vector3(0f, 0f, -200f);
+    [SerializeField] private Vector3 orbitOffsetFromCenter   = new Vector3(0f, 60f, -200f);
     [SerializeField] private Transform[]   focusTargets;
     [SerializeField] private ObjectManager objectManager;
+
+    [Header("Configuración Primera Persona")]
+    [SerializeField] private float initialFPMoveSpeed = 100f;
+    [SerializeField] private float initialFPRotSpeed = 90f;
+
+    [Header("Configuración Orbital")]
+    [SerializeField] private float initialOrbitSpeed = 80f;
+    [SerializeField] private float initialOrbitZoomSpeed = 60f;
+    [SerializeField] private float initialGlobalOrbitDistance = 200f;
+    [SerializeField] private float initialFocusDistance = 30f;
 
     // ── Cámara ─────────────────────────────────────────────────────
     private Camera cam;
@@ -69,7 +82,7 @@ public class CameraManager : MonoBehaviour
         cam.fieldOfView     = 60f;
         cam.nearClipPlane   = 0.1f;
         cam.farClipPlane    = 1000f;
-        cam.transform.position = new Vector3(0f, 0f, -200f);
+        cam.transform.position = absoluteInitialPosition;
         cam.transform.rotation = Quaternion.identity;
 
         go.AddComponent<AudioListener>();
@@ -79,15 +92,20 @@ public class CameraManager : MonoBehaviour
     {
         // Primera persona
         fpCam            = gameObject.AddComponent<FirstPersonCamera>();
-        fpCam.moveSpeed  = 100f;
-        fpCam.rotSpeed   = 90f;
+        fpCam.moveSpeed  = initialFPMoveSpeed;
+        fpCam.rotSpeed   = initialFPRotSpeed;
 
         // Orbital
         orbitCam = gameObject.AddComponent<OrbitalCamera>();
-        orbitCam.orbitSpeed    = 80f;
-        orbitCam.zoomSpeed     = 60f;
-        orbitCam.objectManager = objectManager;
-        orbitCam.focusTargets  = focusTargets;
+        orbitCam.orbitSpeed          = initialOrbitSpeed;
+        orbitCam.zoomSpeed           = initialOrbitZoomSpeed;
+        orbitCam.globalOrbitDistance = initialGlobalOrbitDistance;
+        orbitCam.focusDistance       = initialFocusDistance;
+        orbitCam.objectManager       = objectManager;
+        orbitCam.focusTargets        = focusTargets;
+
+        // Establecer el target inicial y el offset antes de que se recalcule por el ObjectManager (si existe)
+        orbitCam.SetGlobalTarget(initialOrbitTarget, orbitOffsetFromCenter);
     }
 
     // ──────────────────────────────────────────────────────────────
@@ -162,6 +180,8 @@ public class CameraManager : MonoBehaviour
         else
         {
             cam.transform.position = fpInitPos;
+            // Opcional: reiniciar a una rotación base en lugar de mantener en la que estaba
+            cam.transform.rotation = Quaternion.identity;
         }
 
         // Informar al modo orbital

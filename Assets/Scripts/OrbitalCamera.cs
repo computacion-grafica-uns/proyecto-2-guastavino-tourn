@@ -6,6 +6,8 @@ public class OrbitalCamera : MonoBehaviour
     // ── Config ─────────────────────────────────────────────────────
     [HideInInspector] public float orbitSpeed = 80f;
     [HideInInspector] public float zoomSpeed  = 60f;
+    [HideInInspector] public float globalOrbitDistance = 200f;
+    [HideInInspector] public float focusDistance = 30f;
 
     // ── Dependencias externas ──────────────────────────────────────
     [HideInInspector] public ObjectManager objectManager;
@@ -88,7 +90,7 @@ public class OrbitalCamera : MonoBehaviour
         if (focusMode)
         {
             savedGlobalDistance = orbitDistance;
-            orbitDistance = 100f; 
+            orbitDistance = focusDistance; 
             ApplyFocusTarget(focusIndex, true);
         }
         else
@@ -109,13 +111,21 @@ public class OrbitalCamera : MonoBehaviour
         OrbitTargetFields[1] = orbitTargetGlobal.y.ToString("F1");
         OrbitTargetFields[2] = orbitTargetGlobal.z.ToString("F1");
 
+        // Asignar explícitamente la distancia global configurada
+        orbitDistance = globalOrbitDistance;
+
         float dist = orbitOffset.magnitude;
         if (dist > 0.001f)
         {
-            orbitDistance = dist;
             Vector3 dir = orbitOffset / dist;
             orbitPitch = Mathf.Asin(Mathf.Clamp(dir.y, -1f, 1f)) * Mathf.Rad2Deg;
             orbitYaw   = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        }
+        else
+        {
+            // Evitar problemas si el offset es exactamente (0,0,0)
+            orbitPitch = 30f;
+            orbitYaw = 180f;
         }
 
         if (!focusMode)

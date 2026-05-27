@@ -6,7 +6,7 @@ public class ObjectManager : MonoBehaviour
     private int columns = 6;
     private Vector3 spacing = new Vector3(90f, 60f, 0f);
     public GameObject teapotPrefab;
-    public Vector3 teapotScale = new Vector3(0.5f, 0.5f, 0.5f);
+    public Vector3 teapotScale = new Vector3(0.01f, 0.01f, 0.01f);
 
     [Header("Materiales por fila")]
     public Material[] blinnPhongMaterials;
