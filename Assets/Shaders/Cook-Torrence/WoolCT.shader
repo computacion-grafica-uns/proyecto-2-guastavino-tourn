@@ -228,9 +228,11 @@ Shader "Custom/WoolCT"
 
                 if (NdotL <= 0.0) return;
 
-                totalDiffuse += (Kd / UNITY_PI) * lightColor * NdotL;
-
                 float3 F = F_Schlick(F0, VdotH);
+                float3 kdEnergy = 1.0 - F;
+                
+                totalDiffuse += kdEnergy * (Kd / UNITY_PI) * lightColor * NdotL;
+
                 float  D = D_select(NdotH, roughness);
                 float  G = G_select(NdotL, NdotV, roughness);
                 float  denom = 4.0 * max(NdotL * NdotV, 0.001);

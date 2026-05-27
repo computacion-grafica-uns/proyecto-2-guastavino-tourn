@@ -73,10 +73,13 @@ Material:
     - _DstBlend: 0
     - _FabricScale: 3
     - _FiberScale: 80
+    - _FlowerScale: 8
+    - _FlowerSize: 0.35
     - _Frequency: 3
     - _FuzzScale: 60
     - _FuzzStrength: 0.119
     - _GMethod: 0
+    - _GlazeStrength: 0.15
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -86,7 +89,8 @@ Material:
     - _OcclusionStrength: 1
     - _Octaves: 5.25
     - _Parallax: 0.02
-    - _Roughness: 0.5
+    - _PetalCount: 6
+    - _Roughness: 0.9
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -96,15 +100,19 @@ Material:
     - _WoolScale: 18
     - _ZWrite: 1
     m_Colors:
-    - _AmbientLight: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _AmbientLight: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color1: {r: 0.8, g: 0.22, b: 0.1, a: 1}
-    - _Color2: {r: 0.45, g: 0.1, b: 0.05, a: 1}
+    - _Color1: {r: 0, g: 0, b: 0, a: 1}
+    - _Color2: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _F0: {r: 0.04, g: 0.04, b: 0.04, a: 1}
+    - _F0: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+    - _FlowerColor: {r: 0.72, g: 0.37999994, b: 0.52, a: 1}
+    - _FlowerColor2: {r: 0.88, g: 0.72, b: 0.34999996, a: 1}
+    - _LeafColor: {r: 0.41999996, g: 0.56, b: 0.34999996, a: 1}
     - _LightIntensity: {r: 1, g: 1, b: 1, a: 1}
     - _LightPosition_w: {r: 500, g: 0, b: 0, a: 1}
-    - _MaterialKa: {r: 7.14, g: 5.06, b: 5.81, a: 0}
+    - _MaterialKa: {r: 1, g: 1, b: 1, a: 1}
     - _MaterialKd: {r: 0, g: 0, b: 0, a: 0}
     - _MaterialKs: {r: 0.02, g: 0.02, b: 0.02, a: 0}
   m_BuildTextureStacks: []
