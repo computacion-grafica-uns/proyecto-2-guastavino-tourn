@@ -26,6 +26,7 @@ public class OrbitalCamera : MonoBehaviour
     private float orbitYaw      = 180f;
     private float orbitPitch    =  30f;
 
+    private float savedGlobalDistance = 200f;
     private bool  focusMode   = false;
     private int   focusIndex  = 0;
     private int   focusRow    = 0;
@@ -89,9 +90,16 @@ public class OrbitalCamera : MonoBehaviour
         focusMode = !focusMode;
 
         if (focusMode)
+        {
+            savedGlobalDistance = orbitDistance;
+            orbitDistance = 100f; 
             ApplyFocusTarget(focusIndex, true);
+        }
         else
+        {
+            orbitDistance = savedGlobalDistance;
             RestoreFocusTargets();
+        }
     }
 
     /// <summary>
