@@ -97,7 +97,7 @@ Material:
     - _ColorMid: {r: 0.6, g: 0.54352295, b: 0.2, a: 1}
     - _ColorMin: {r: 0.2870991, g: 0.29803923, b: 0.09803922, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _F0: {r: 0.04, g: 0.04, b: 0.04, a: 1}
+    - _F0: {r: 0.3, g: 0.3, b: 0.3, a: 1}
     - _LightIntensity: {r: 1, g: 1, b: 1, a: 1}
     - _LightPosition_w: {r: 500, g: 0, b: 200, a: 1}
     - _MaterialKa: {r: 0.2, g: 0.2, b: 0.2, a: 0}

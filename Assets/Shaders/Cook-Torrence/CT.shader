@@ -7,6 +7,8 @@
         _MaterialKd      ("Material Kd",            Vector)     = (0.6,0.6,0.6,0)
         _F0              ("F0 (reflectancia base)", Color)      = (0.04,0.04,0.04,1)
         _Roughness       ("Roughness",              Range(0,1)) = 0.5
+        _Alpha           ("Alpha (transparencia)",  Range(0,1)) = 1.0
+        [Toggle] _ZWrite ("ZWrite (opaco=1)",       Float)       = 1
 
          [Space]
         [Header(Metodos)]
@@ -16,7 +18,9 @@
         [IntRange] _GMethod ("G: 0=SmithGGX  1=SmithBeckmann ", Range(0,1)) = 0
     }
     SubShader
-    {
+    {    
+        ZWrite [_ZWrite]
+        Blend SrcAlpha OneMinusSrcAlpha
         Tags { "RenderType"="Opaque"}
 
         Pass
@@ -32,6 +36,7 @@
             float4 _MaterialKd;
             float4 _F0;
             float  _Roughness;
+            float  _Alpha;
             int    _DMethod;
             int    _GMethod;
 
@@ -190,7 +195,7 @@
 
                 fixed4 fragColor;
                 fragColor.rgb = ambient + totalDiffuse + totalSpecular;
-                fragColor.a   = 1.0;
+                fragColor.a   = _Alpha;
                 return fragColor;
             }
             ENDCG
