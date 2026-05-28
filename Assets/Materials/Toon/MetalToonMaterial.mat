@@ -75,6 +75,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OutlineWidth: 1.75
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -90,4 +91,5 @@ Material:
     - _MaterialKa: {r: 0.05, g: 0.01, b: 0.01, a: 1}
     - _MaterialKd: {r: 0, g: 0, b: 0, a: 1}
     - _MaterialKs: {r: 0.79735, g: 0.72399, b: 0.208, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

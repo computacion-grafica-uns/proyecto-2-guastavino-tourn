@@ -9,6 +9,8 @@ Shader "toonText2D"
         _MaterialKs      ("Material Ks",             Vector) = (1,1,1,0)
         _Material_n      ("Material n (brillo)",     Float)  = 32
         _Bands           ("Toon Bands",             Range(1,8)) = 3
+        _OutlineColor    ("Outline Color",          Color)      = (0,0,0,1)
+        _OutlineWidth    ("Outline Width",          Range(0, 10)) = 0.5
         _Alpha           ("Alpha (transparencia)",  Range(0,1)) = 1.0
         [Toggle] _ZWrite ("ZWrite (opaco=1)",       Float)       = 1
     }
@@ -20,6 +22,49 @@ Shader "toonText2D"
         ZWrite [_ZWrite]
         Blend SrcAlpha OneMinusSrcAlpha
 
+        // --- OUTLINE PASS (Inverted Hull) ---
+        Pass
+        {
+            Name "OUTLINE"
+            Cull Front // Renderizamos solo las caras traseras
+            ZWrite On
+
+            CGPROGRAM
+            #pragma vertex vertOutline
+            #pragma fragment fragOutline
+            #include "UnityCG.cginc"
+
+            float _OutlineWidth;
+            float4 _OutlineColor;
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+            };
+
+            v2f vertOutline(appdata v)
+            {
+                v2f o;
+                // Inflar los vértices a lo largo de sus normales antes de transformar
+                v.vertex.xyz += v.normal * _OutlineWidth;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                return o;
+            }
+
+            fixed4 fragOutline(v2f i) : SV_Target
+            {
+                return _OutlineColor;
+            }
+            ENDCG
+        }
+
+        // --- MAIN GEOMETRY PASS ---
         Pass
         {
             CGPROGRAM
