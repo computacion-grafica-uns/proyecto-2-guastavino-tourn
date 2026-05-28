@@ -1,4 +1,4 @@
-﻿Shader "Custom/BPNormalMap"
+﻿Shader "Custom/BlinnPhong/BPNormalMap"
 {
     Properties
     {

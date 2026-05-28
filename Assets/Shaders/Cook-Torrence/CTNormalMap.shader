@@ -1,4 +1,4 @@
-Shader "Custom/CTNormalMap"
+Shader "Custom/CookTorrence/CTNormalMap"
 {
     Properties
     {

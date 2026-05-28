@@ -1,4 +1,4 @@
-﻿Shader "Custom/BPText2D"
+﻿Shader "Custom/BlinnPhong/BPText2D"
 {
     Properties
     {

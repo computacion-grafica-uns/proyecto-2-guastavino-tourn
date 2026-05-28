@@ -1,4 +1,4 @@
-Shader "toonText2D"
+Shader "Custom/Toon/ToonText2D"
 {
     Properties
     {

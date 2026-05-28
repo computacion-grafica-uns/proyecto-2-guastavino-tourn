@@ -1,27 +1,49 @@
-﻿Shader "Custom/CookTorrence/CT"
+Shader "Custom/CookTorrence/BlueWillowCT"
 {
     Properties
     {
+        // ── Iluminación Cook-Torrance ────────────────────────────────
         _AmbientLight    ("Ambient Light",          Color)      = (0.2,0.2,0.2,1)
         _MaterialKa      ("Material Ka",            Vector)     = (0.2,0.2,0.2,0)
-        _MaterialKd      ("Material Kd",            Vector)     = (0.6,0.6,0.6,0)
         _F0              ("F0 (reflectancia base)", Color)      = (0.04,0.04,0.04,1)
         _Roughness       ("Roughness",              Range(0,1)) = 0.5
         _Alpha           ("Alpha (transparencia)",  Range(0,1)) = 1.0
-        [Toggle] _ZWrite ("ZWrite (opaco=1)",       Float)       = 1
-
-         [Space]
+        
+        [Space]
         [Header(Metodos)]
         // 0 = Blinn       | 1 = Beckmann    | 2 = GGX
         [IntRange] _DMethod ("D: 0=Blinn  1=Beckmann  2=GGX", Range(0,2)) = 0
         // 0 = Smith-GGX | 1 = Smith-Beckmann
         [IntRange] _GMethod ("G: 0=SmithGGX  1=SmithBeckmann ", Range(0,1)) = 0
+
+        // ── Paleta Blue Willow ───────────────────────────────────────
+        [Space]
+        [Header(Blue Willow Pattern)]
+        _ColorBase      ("Porcelana base",       Color)  = (0.96, 0.96, 0.98, 1)
+        _ColorDark      ("Azul oscuro",          Color)  = (0.10, 0.23, 0.54, 1)
+        _ColorMid       ("Azul medio",           Color)  = (0.18, 0.40, 0.76, 1)
+        _ColorLight     ("Azul claro",           Color)  = (0.45, 0.65, 0.90, 1)
+
+        // ── Layout Blue Willow ───────────────────────────────────────
+        _GridCount      ("Flores por fila",      Range(1,30))      = 8
+        _PeonyRadius    ("Radio peonía",         Range(0.05,3))    = 0.13
+        _SmallRadius    ("Radio flor pequeña",   Range(0.02,3))    = 0.045
+        _SmallOffset    ("Offset flor pequeña",  Range(0.0, 1.0))  = 0.4
+        _Jitter         ("Jitter de posición",   Range(0,4))       = 0.08
+
+        // ── Bandas Blue Willow ───────────────────────────────────────
+        _BandTopY       ("Banda superior Y",     Range(0, 1.0))    = 0.15
+        _BandTopH       ("Banda superior Alto",  Range(0.01, 0.5)) = 0.08
+        _BandBotY       ("Banda inferior Y",     Range(0, 1.0))    = 0.75
+        _BandBotH       ("Banda inferior Alto",  Range(0.01, 0.5)) = 0.25
+
+        [Toggle] _ZWrite ("ZWrite (opaco=1)",       Float)       = 1
     }
     SubShader
     {    
         ZWrite [_ZWrite]
         Blend SrcAlpha OneMinusSrcAlpha
-        Tags { "RenderType"="Opaque"}
+        Tags { "RenderType"="Opaque" "Queue"="Geometry"}
 
         Pass
         {
@@ -30,10 +52,10 @@
             #pragma fragment fragmentShader
             #include "UnityCG.cginc"
             #include "../LightingGlobals.cginc"
+            #include "../BlueWillowPattern.cginc" // Importamos el patrón base
 
             float4 _AmbientLight;
             float4 _MaterialKa;
-            float4 _MaterialKd;
             float4 _F0;
             float  _Roughness;
             float  _Alpha;
@@ -44,12 +66,14 @@
             {
                 float4 position : POSITION;
                 float3 normal   : NORMAL;
+                float2 uv       : TEXCOORD0; // Necesario para el patrón
             };
             struct v2f
             {
                 float4 position   : SV_POSITION;
                 float4 position_w : TEXCOORD0;
                 float3 normal_w   : TEXCOORD1;
+                float2 uv         : TEXCOORD2;
             };
 
             v2f vertexShader(vertexData v)
@@ -58,6 +82,7 @@
                 output.position   = UnityObjectToClipPos(v.position);
                 output.position_w = mul(unity_ObjectToWorld, v.position);
                 output.normal_w   = UnityObjectToWorldNormal(v.normal);
+                output.uv         = v.uv;
                 return output;
             }
 
@@ -172,26 +197,30 @@
                 float3 V = normalize(_WorldSpaceCameraPos - f.position_w.xyz);
                 float roughness = max(_Roughness, 0.0001);
 
+                // Obtenemos nuestro color BlueWillow dinámico
+                float3 texColor = getBlueWillowPattern(f.uv);
+
                 float3 totalDiffuse  = float3(0, 0, 0);
                 float3 totalSpecular = float3(0, 0, 0);
                 float3 L, lightColor;
 
                 GetDirLight(L, lightColor);
                 AccumulateCT(N, V, L, lightColor,
-                    _MaterialKd.rgb, _F0.rgb, roughness,
+                    texColor, _F0.rgb, roughness,
                     totalDiffuse, totalSpecular);
 
                 GetPointLight(f.position_w.xyz, L, lightColor);
                 AccumulateCT(N, V, L, lightColor,
-                    _MaterialKd.rgb, _F0.rgb, roughness,
+                    texColor, _F0.rgb, roughness,
                     totalDiffuse, totalSpecular);
 
                 GetSpotLight(f.position_w.xyz, L, lightColor);
                 AccumulateCT(N, V, L, lightColor,
-                    _MaterialKd.rgb, _F0.rgb, roughness,
+                    texColor, _F0.rgb, roughness,
                     totalDiffuse, totalSpecular);
                     
-                float3 ambient = _MaterialKa.rgb * _AmbientLight.rgb * _MaterialKd.rgb;
+                // Ambient utiliza el tex color en vez del materialKd original
+                float3 ambient = _MaterialKa.rgb * _AmbientLight.rgb * texColor;
 
                 fixed4 fragColor;
                 fragColor.rgb = ambient + totalDiffuse + totalSpecular;

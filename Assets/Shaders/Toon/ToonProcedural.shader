@@ -1,4 +1,4 @@
-Shader "toonProcedural"
+Shader "Custom/Toon/ToonProcedural"
 {
     Properties
     {

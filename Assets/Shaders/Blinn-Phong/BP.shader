@@ -1,4 +1,4 @@
-﻿Shader "Custom/BP"
+﻿Shader "Custom/BlinnPhong/BP"
 {
     Properties
     {

@@ -1,4 +1,4 @@
-Shader "toonNormalMap"
+Shader "Custom/Toon/ToonNormalMap"
 {
     Properties
     {

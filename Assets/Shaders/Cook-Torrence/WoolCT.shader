@@ -1,4 +1,4 @@
-Shader "Custom/WoolCT"
+Shader "Custom/CookTorrence/WoolCT"
 {
     Properties
     {
@@ -13,7 +13,7 @@ Shader "Custom/WoolCT"
         _Color1          ("Color lana base",        Color)       = (0.85, 0.55, 0.20, 1)
         _Color2          ("Color lana oscuro",      Color)       = (0.60, 0.32, 0.10, 1)
         _WoolScale       ("Escala del hilo",        Float)       = 18.0
-        _TwistStrength   ("Fuerza de torsión",      Float)       = 3.5
+        _TwistStrength   ("Fuerza de torsiï¿½n",      Float)       = 3.5
         _FuzzScale       ("Escala de pelusa",       Float)       = 60.0
         _FuzzStrength    ("Fuerza de pelusa",       Range(0,1))  = 0.35
         _Octaves         ("Octavas del fractal",    Range(1,6))  = 3

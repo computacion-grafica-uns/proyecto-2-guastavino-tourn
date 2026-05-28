@@ -1,4 +1,4 @@
-﻿Shader "Custom/CTText2D"
+﻿Shader "Custom/CookTorrence/CTText2D"
 {
     Properties
     {
