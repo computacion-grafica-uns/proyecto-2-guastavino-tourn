@@ -8,11 +8,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BlueWillowToonMaterial
-  m_Shader: {fileID: 4800000, guid: bf25c86278f731943a4bd9199c62acd0, type: 3}
+  m_Shader: {fileID: 4800000, guid: 62ba699259f4c2c4c85b4cf08096cfca, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _ZWRITE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -61,6 +62,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Alpha: 1
     - _BandBotH: 0.031
     - _BandBotY: 0.675
     - _BandBottom: 0.743
@@ -70,6 +72,7 @@ Material:
     - _BandTop: 0.134
     - _BandTopH: 0.017
     - _BandTopY: 0.586
+    - _Bands: 3
     - _BorderWidth: 0
     - _BranchDensity: 1
     - _BumpScale: 1
@@ -87,6 +90,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OutlineWidth: 1
     - _Parallax: 0.02
     - _PatternScale: 4
     - _PeonyRadius: 0.26
@@ -110,4 +114,5 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MaterialKa: {r: 0.35, g: 0.35, b: 0.35, a: 0}
     - _MaterialKs: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

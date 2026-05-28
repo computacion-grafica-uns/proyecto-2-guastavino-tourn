@@ -224,14 +224,14 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 66a7bc6ca54959240b57e92f31687182, type: 2}
   - {fileID: 2100000, guid: 15e3bc90abe9d4a4bb766f7c2907a801, type: 2}
   - {fileID: 2100000, guid: fbc808a0be7ac414fb64f10f7fdd108f, type: 2}
-  - {fileID: 2100000, guid: 6741884695686e148b535b1bb5137724, type: 2}
+  - {fileID: 2100000, guid: 7aea08f0502a95642ad8ba092bb6dd28, type: 2}
   - {fileID: 2100000, guid: 29feaf3bd3b9ca7499c30d5b7a3df350, type: 2}
   toonMaterials:
   - {fileID: 2100000, guid: 847b6d6420b021245b89a06ee1f3e951, type: 2}
   - {fileID: 2100000, guid: e2e7bd13fba427949b13143247f8b9b3, type: 2}
   - {fileID: 2100000, guid: a63875edfbcb8b24e9e079849ab5d727, type: 2}
   - {fileID: 2100000, guid: 69cd38137f2999a4cbd3a71e4b4db70a, type: 2}
-  - {fileID: 2100000, guid: fb885d1b6ca3e3d4f9330bf885c7734d, type: 2}
+  - {fileID: 2100000, guid: 6c2b0f66e432dae48af18feaf09c8e2b, type: 2}
   - {fileID: 2100000, guid: 67043d6296352ac49ae5b8aaf85dbe40, type: 2}
 --- !u!1 &1969226420
 GameObject:
