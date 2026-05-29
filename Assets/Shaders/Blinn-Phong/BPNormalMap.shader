@@ -78,8 +78,7 @@
                 float3 T = normalize(f.T_w);
                 float3 B = normalize(f.B_w);
                 float3 N = normalize(f.N_w);
-                T = normalize(T - N * dot(T, N));
-                B = cross(N, T);
+            
 
                 float3 N_world = normalize(
                     normalTS.x * T +
@@ -114,7 +113,7 @@
                 float3 ambient = _MaterialKa * _AmbientLight.rgb * texColor;
 
                 fixed4 fragColor;
-                fragColor.rgb = ambient + totalDiffuse + totalSpecular;
+                fragColor.rgb = ambient + max(totalDiffuse, 0) + max(totalSpecular, 0);
                 fragColor.a   = 1.0;
                 return fragColor;
             }
