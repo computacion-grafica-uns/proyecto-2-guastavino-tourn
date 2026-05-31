@@ -7,13 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BlueWillowToonMaterial
-  m_Shader: {fileID: 4800000, guid: 62ba699259f4c2c4c85b4cf08096cfca, type: 3}
+  m_Name: BP2DTextMaterial
+  m_Shader: {fileID: 4800000, guid: 41614e760f95a754bb29aceaffdb9527, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ZWRITE_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -62,57 +61,28 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 1
-    - _BandBotH: 0.031
-    - _BandBotY: 0.675
-    - _BandBottom: 0.743
-    - _BandH: 0.01
-    - _BandMid: 0.3
-    - _BandThickness: 0.0063
-    - _BandTop: 0.134
-    - _BandTopH: 0.017
-    - _BandTopY: 0.586
-    - _Bands: 3
-    - _BorderWidth: 0
-    - _BranchDensity: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DetailBlend: 0.9
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _FlowerCount: 7.91
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GridCount: 14.2
-    - _Jitter: 0.16
-    - _Material_n: 100
+    - _Material_n: 32
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _OutlineWidth: 0
     - _Parallax: 0.02
-    - _PatternScale: 4
-    - _PeonyRadius: 0.26
-    - _PeonyScale: 0.096
-    - _ScrollDensity: 0.12
-    - _SmallOffset: 0.193
-    - _SmallRadius: 0.119
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientLight: {r: 0.1986472, g: 0.24014644, b: 0.4528302, a: 1}
+    - _AmbientLight: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorBase: {r: 0.9292453, g: 0.9292453, b: 1, a: 1}
-    - _ColorDark: {r: 0.059999965, g: 0.21999997, b: 0.54999995, a: 1}
-    - _ColorHighlight: {r: 0.53999996, g: 0.71, b: 0.91, a: 1}
-    - _ColorLight: {r: 0.54999995, g: 0.72, b: 0.95, a: 1}
-    - _ColorMid: {r: 0.17999998, g: 0.41999996, b: 0.78, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MaterialKa: {r: 0.35, g: 0.35, b: 0.35, a: 0}
-    - _MaterialKs: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MaterialKa: {r: 0.2, g: 0.2, b: 0.2, a: 0}
+    - _MaterialKd: {r: 0.6, g: 0.6, b: 0.6, a: 0}
+    - _MaterialKs: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

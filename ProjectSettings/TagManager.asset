@@ -6,6 +6,9 @@ TagManager:
   tags:
   - ct_cuero_sillon
   - ct_cuero_silla
+  - bp_marmol
+  - bp_granito
+  - bp_alfombra
   layers:
   - Default
   - TransparentFX
