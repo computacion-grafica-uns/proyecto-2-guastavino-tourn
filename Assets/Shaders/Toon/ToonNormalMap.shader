@@ -2,86 +2,82 @@ Shader "Custom/Toon/ToonNormalMap"
 {
     Properties
     {
-        _BaseColor       ("Color base",              Color)  = (1,1,1,1)
-        _NormalMap       ("Normal Map",             2D)     = "bump" {}
+        // ── Albedo: 0 = color, 1 = textura ───────────────────────
+        [IntRange] _AlbedoMode  ("Albedo: 0=Color  1=Texture", Range(0,1)) = 0
+        _BaseColor       ("Color base",             Color)      = (1,1,1,1)
+        _MainTex         ("Textura albedo",          2D)         = "white" {}
+
+        // ── Normal Map ────────────────────────────────────────────
+        _NormalMap       ("Normal Map",             2D)         = "bump" {}
         _NormalStrength  ("Intensidad del normal",  Range(0,3)) = 1.0
-        _AmbientLight    ("Ambient Light",          Color)  = (0.2,0.2,0.2,1)
-        _MaterialKa      ("Material Ka",            Range(0,1)) = 0.2
-        _MaterialKs      ("Material Ks",            Vector) = (0.5,0.5,0.5,0)
-        _Material_n      ("Material n (brillo)",    Float)  = 32
+
+        // ── Iluminación Toon ──────────────────────────────────────
+        _AmbientLight    ("Ambient Light",          Color)      = (0.2,0.2,0.2,1)
+        _MaterialKa      ("Material Ka",            Vector)     = (0.2,0.2,0.2,0)
+        _MaterialKs      ("Material Ks",            Vector)     = (0.5,0.5,0.5,0)
+        _Material_n      ("Material n (brillo)",    Float)      = 32
         _Bands           ("Toon Bands",             Range(1,8)) = 3
         _OutlineColor    ("Outline Color",          Color)      = (0,0,0,1)
-        _OutlineWidth    ("Outline Width",          Range(0, 10)) = 0.5
-        [Toggle] _ZWrite ("ZWrite (opaco=1)",       Float)       = 1
+        _OutlineWidth    ("Outline Width",          Range(0,10))= 0.5
+        [Toggle] _ZWrite ("ZWrite (opaco=1)",       Float)      = 1
     }
 
     SubShader
     {
-        Tags { "RenderType"="Opaque"}
-
+        Tags { "RenderType"="Opaque" }
         ZWrite [_ZWrite]
         Blend SrcAlpha OneMinusSrcAlpha
 
-        // --- OUTLINE PASS (Inverted Hull) ---
+        // ── OUTLINE PASS ──────────────────────────────────────────
         Pass
         {
             Name "OUTLINE"
-            Cull Front // Renderizamos solo las caras traseras
+            Cull Front
             ZWrite On
-
             CGPROGRAM
             #pragma vertex vertOutline
             #pragma fragment fragOutline
             #include "UnityCG.cginc"
 
-            float _OutlineWidth;
+            float  _OutlineWidth;
             float4 _OutlineColor;
 
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-            };
-
-            struct v2f
-            {
-                float4 pos : SV_POSITION;
-            };
+            struct appdata { float4 vertex : POSITION; float3 normal : NORMAL; };
+            struct v2f     { float4 pos    : SV_POSITION; };
 
             v2f vertOutline(appdata v)
             {
                 v2f o;
-                // Inflar los vértices a lo largo de sus normales antes de transformar
                 v.vertex.xyz += v.normal * _OutlineWidth;
                 o.pos = UnityObjectToClipPos(v.vertex);
                 return o;
             }
-
-            fixed4 fragOutline(v2f i) : SV_Target
-            {
-                return _OutlineColor;
-            }
+            fixed4 fragOutline(v2f i) : SV_Target { return _OutlineColor; }
             ENDCG
         }
 
-        // --- MAIN GEOMETRY PASS ---
+        // ── MAIN GEOMETRY PASS ────────────────────────────────────
         Pass
         {
+            Cull Back
             CGPROGRAM
             #pragma vertex vertexShader
             #pragma fragment fragmentShader
             #include "UnityCG.cginc"
             #include "../LightingGlobals.cginc"
 
-            float4 _BaseColor;
+            int       _AlbedoMode;
+            float4    _BaseColor;
+            sampler2D _MainTex;
+            float4    _MainTex_ST;
             sampler2D _NormalMap;
-            float4 _NormalMap_ST;
-            float  _NormalStrength;
-            float4 _AmbientLight;
-            float  _MaterialKa;
-            float4 _MaterialKs;
-            float  _Material_n;
-            float  _Bands;
+            float4    _NormalMap_ST;
+            float     _NormalStrength;
+            float4    _AmbientLight;
+            float4    _MaterialKa;
+            float4    _MaterialKs;
+            float     _Material_n;
+            float     _Bands;
 
             struct vertexData
             {
@@ -93,29 +89,27 @@ Shader "Custom/Toon/ToonNormalMap"
 
             struct v2f
             {
-                float4 position   : SV_POSITION;
-                float4 position_w : TEXCOORD0;
+                float4 position     : SV_POSITION;
+                float4 position_w   : TEXCOORD0;
+                float2 uv_MainTex   : TEXCOORD1;
                 float2 uv_NormalMap : TEXCOORD2;
-                float3 T_w        : TEXCOORD3;
-                float3 B_w        : TEXCOORD4;
-                float3 N_w        : TEXCOORD5;
+                float3 T_w          : TEXCOORD3;
+                float3 B_w          : TEXCOORD4;
+                float3 N_w          : TEXCOORD5;
             };
 
             float toonStep(float value, float bands)
             {
-                if (bands <= 1.0)
-                {
-                    return value;
-                }
-
+                if (bands <= 1.0) return value;
                 return floor(value * bands) / (bands - 1.0);
             }
 
             v2f vertexShader(vertexData v)
             {
                 v2f output;
-                output.position   = UnityObjectToClipPos(v.position);
-                output.position_w = mul(unity_ObjectToWorld, v.position);
+                output.position     = UnityObjectToClipPos(v.position);
+                output.position_w   = mul(unity_ObjectToWorld, v.position);
+                output.uv_MainTex   = TRANSFORM_TEX(v.uv, _MainTex);
                 output.uv_NormalMap = TRANSFORM_TEX(v.uv, _NormalMap);
 
                 float3 N = UnityObjectToWorldNormal(v.normal);
@@ -130,6 +124,14 @@ Shader "Custom/Toon/ToonNormalMap"
 
             fixed4 fragmentShader(v2f f) : SV_Target
             {
+                // ── Albedo ────────────────────────────────────────
+                float3 albedo;
+                if (_AlbedoMode == 1)
+                    albedo = tex2D(_MainTex, f.uv_MainTex).rgb;
+                else
+                    albedo = _BaseColor.rgb;
+
+                // ── Normal Map ────────────────────────────────────
                 float3 normalTS = UnpackNormal(tex2D(_NormalMap, f.uv_NormalMap));
                 normalTS.xy *= _NormalStrength;
                 normalTS = normalize(normalTS);
@@ -146,56 +148,51 @@ Shader "Custom/Toon/ToonNormalMap"
                     normalTS.z * N
                 );
 
-                float3 texColor = _BaseColor.rgb;
+                // ── Iluminación Toon ──────────────────────────────
                 float3 V = normalize(_WorldSpaceCameraPos - f.position_w.xyz);
-
-                float3 totalDiffuse = float3(0, 0, 0);
+                float3 totalDiffuse  = float3(0, 0, 0);
                 float3 totalSpecular = float3(0, 0, 0);
-
                 float3 L, lightColor;
-                float bands = max(1.0, _Bands);
+                float  bands = max(1.0, _Bands);
 
                 GetDirLight(L, lightColor);
                 {
-                    float3 H = normalize(L + V);
-                    float NdotL = max(0.0, dot(N_world, L));
+                    float3 H        = normalize(L + V);
+                    float NdotL     = max(0.0, dot(N_world, L));
                     float toonNdotL = toonStep(NdotL, bands);
-                    float specBase = pow(max(0.0, dot(N_world, H)), _Material_n);
-                    float toonSpec = toonStep(specBase, bands);
-                    totalDiffuse += texColor * lightColor * toonNdotL;
+                    float specBase  = pow(max(0.0, dot(N_world, H)), _Material_n);
+                    float toonSpec  = toonStep(specBase, bands);
+                    totalDiffuse  += albedo * lightColor * toonNdotL;
                     totalSpecular += _MaterialKs.rgb * lightColor * toonSpec;
                 }
-
                 GetPointLight(f.position_w.xyz, L, lightColor);
                 {
-                    float3 H = normalize(L + V);
-                    float NdotL = max(0.0, dot(N_world, L));
+                    float3 H        = normalize(L + V);
+                    float NdotL     = max(0.0, dot(N_world, L));
                     float toonNdotL = toonStep(NdotL, bands);
-                    float specBase = pow(max(0.0, dot(N_world, H)), _Material_n);
-                    float toonSpec = toonStep(specBase, bands);
-                    totalDiffuse += texColor * lightColor * toonNdotL;
+                    float specBase  = pow(max(0.0, dot(N_world, H)), _Material_n);
+                    float toonSpec  = toonStep(specBase, bands);
+                    totalDiffuse  += albedo * lightColor * toonNdotL;
                     totalSpecular += _MaterialKs.rgb * lightColor * toonSpec;
                 }
-
                 GetSpotLight(f.position_w.xyz, L, lightColor);
                 {
-                    float3 H = normalize(L + V);
-                    float NdotL = max(0.0, dot(N_world, L));
+                    float3 H        = normalize(L + V);
+                    float NdotL     = max(0.0, dot(N_world, L));
                     float toonNdotL = toonStep(NdotL, bands);
-                    float specBase = pow(max(0.0, dot(N_world, H)), _Material_n);
-                    float toonSpec = toonStep(specBase, bands);
-                    totalDiffuse += texColor * lightColor * toonNdotL;
+                    float specBase  = pow(max(0.0, dot(N_world, H)), _Material_n);
+                    float toonSpec  = toonStep(specBase, bands);
+                    totalDiffuse  += albedo * lightColor * toonNdotL;
                     totalSpecular += _MaterialKs.rgb * lightColor * toonSpec;
                 }
 
-                float3 ambient = _MaterialKa * _AmbientLight.rgb * texColor;
+                float3 ambient = _MaterialKa.rgb * _AmbientLight.rgb * albedo;
 
                 fixed4 fragColor;
                 fragColor.rgb = ambient + totalDiffuse + totalSpecular;
                 fragColor.a   = 1.0;
                 return fragColor;
             }
-
             ENDCG
         }
     }
