@@ -452,23 +452,85 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5903231128433319012, guid: 561ad1f6c1999904d8b6dcdaa842524c, type: 3}
+      propertyPath: m_TagString
+      value: ct_cuero_sillon
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 561ad1f6c1999904d8b6dcdaa842524c, type: 3}
       propertyPath: m_Name
       value: sofa
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 561ad1f6c1999904d8b6dcdaa842524c, type: 3}
+      propertyPath: m_TagString
+      value: ct_cuero_sillon
       objectReference: {fileID: 0}
     - target: {fileID: 4264449902618529949, guid: 561ad1f6c1999904d8b6dcdaa842524c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 65190844964f01440bc434e4baa9e31d, type: 2}
     - target: {fileID: 7863922010149211384, guid: 561ad1f6c1999904d8b6dcdaa842524c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863922010149211384, guid: 561ad1f6c1999904d8b6dcdaa842524c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 65190844964f01440bc434e4baa9e31d, type: 2}
+    - target: {fileID: 8058849437406612304, guid: 561ad1f6c1999904d8b6dcdaa842524c, type: 3}
+      propertyPath: m_TagString
+      value: ct_cuero_sillon
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 561ad1f6c1999904d8b6dcdaa842524c, type: 3}
+--- !u!1 &2017929750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2017929752}
+  - component: {fileID: 2017929751}
+  m_Layer: 0
+  m_Name: MaterialManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2017929751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017929750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05b66e948c8f77546bcc728e8eb792af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: e8192a633792a4842a60527307bc6bcb, type: 2}
+  debugMode: 1
+--- !u!4 &2017929752
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017929750}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.573851, y: -1.7852352, z: -1.3516514}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1948795982786
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5243,7 +5305,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 65190844964f01440bc434e4baa9e31d, type: 2}
-  - {fileID: 3092439742945511283, guid: b13bb30f9ba67d2468fe8bf62983e471, type: 3}
+  - {fileID: 2100000, guid: 65190844964f01440bc434e4baa9e31d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12918,7 +12980,7 @@ GameObject:
   - component: {fileID: 1039915268298944343}
   m_Layer: 0
   m_Name: ID1057
-  m_TagString: Untagged
+  m_TagString: ct_cuero_silla
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15965,7 +16027,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 65190844964f01440bc434e4baa9e31d, type: 2}
-  - {fileID: 3092439742945511283, guid: b13bb30f9ba67d2468fe8bf62983e471, type: 3}
+  - {fileID: 2100000, guid: 65190844964f01440bc434e4baa9e31d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -16240,7 +16302,7 @@ GameObject:
   - component: {fileID: 92840655665936631}
   m_Layer: 0
   m_Name: ID4017
-  m_TagString: Untagged
+  m_TagString: ct_cuero_sillon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17106,7 +17168,7 @@ GameObject:
   - component: {fileID: 3183083276784957768}
   m_Layer: 0
   m_Name: ID4007
-  m_TagString: Untagged
+  m_TagString: ct_cuero_sillon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25059,7 +25121,7 @@ GameObject:
   - component: {fileID: 3806330626426178445}
   m_Layer: 0
   m_Name: ID1047
-  m_TagString: Untagged
+  m_TagString: ct_cuero_silla
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38424,3 +38486,4 @@ SceneRoots:
   - {fileID: 365858964}
   - {fileID: 690737562}
   - {fileID: 1498915840}
+  - {fileID: 2017929752}

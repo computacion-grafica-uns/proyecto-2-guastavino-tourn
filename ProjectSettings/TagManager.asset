@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - ct_cuero_sillon
+  - ct_cuero_silla
   layers:
   - Default
   - TransparentFX

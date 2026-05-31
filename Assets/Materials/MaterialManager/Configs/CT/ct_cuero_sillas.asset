@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 766bcd7ae6739f2488dee304340cc82d, type: 3}
+  m_Name: ct_cuero_sillas
+  m_EditorClassIdentifier: 
+  tagKey: ct_cuero_silla
+  overrideAmbientLight: 0
+  ambientLight: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  overrideKa: 0
+  Ka: {r: 0.2, g: 0.2, b: 0.2, a: 0}
+  overrideKd: 0
+  Kd: {r: 0.6, g: 0.6, b: 0.6, a: 0}
+  overrideAlpha: 0
+  alpha: 1
+  overrideAlbedoMode: 1
+  albedoMode: 0
+  overrideBaseColor: 1
+  baseColor: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
+  overrideMainTex: 0
+  mainTex: {fileID: 0}
+  overrideTiling: 1
+  tiling: {x: 20, y: 20}
+  overrideOffset: 0
+  offset: {x: 0, y: 0}
+  overrideNormalMap: 1
+  normalMap: {fileID: 2800000, guid: 7807a0e0cf25c3941bf0ca9a4f103082, type: 3}
+  overrideNormalStrength: 0
+  normalStrength: 1
+  overrideKs: 0
+  Ks: {r: 1, g: 1, b: 1, a: 0}
+  overrideN: 0
+  materialN: 32
+  overrideF0: 0
+  F0: {r: 0.04, g: 0.04, b: 0.04, a: 1}
+  overrideRoughness: 0
+  roughness: 0.5
+  overrideDMethod: 0
+  dMethod: 0
+  overrideGMethod: 0
+  gMethod: 0
+  overrideBands: 0
+  bands: 3
+  overrideOutlineColor: 0
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  overrideOutlineWidth: 0
+  outlineWidth: 0.5
