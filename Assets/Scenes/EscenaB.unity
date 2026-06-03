@@ -277,7 +277,7 @@ MonoBehaviour:
   fpOffsetFromCenter: {x: 0, y: 0, z: 0}
   orbitOffsetFromCenter: {x: 0, y: 0, z: 0}
   focusTargets:
-  - {fileID: 4095017717801809025}
+  - {fileID: 361431192}
   - {fileID: 1895809381984997992}
   - {fileID: 5886723163331343932}
   - {fileID: 5596834610712558109}
@@ -478,6 +478,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223255219}
   m_Mesh: {fileID: -8999988143869866618, guid: b13bb30f9ba67d2468fe8bf62983e471, type: 3}
+--- !u!4 &361431192 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7fa58eb69744887449de0a3d9373b800, type: 3}
+  m_PrefabInstance: {fileID: 1219329857}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &365858964
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -39,7 +39,7 @@ public class CameraManager : MonoBehaviour
 
     // ── Estado ─────────────────────────────────────────────────────
     private bool orbitalMode           = false;
-    private bool showMenu              = true;
+    private bool showMenu              = false;
     private bool gridCenterInitialized = false;
 
     // ──────────────────────────────────────────────────────────────

@@ -91,7 +91,7 @@ public class LightManager : MonoBehaviour
     private Light spotLight;
 
     // ── Estado de la GUI ──────────────────────────────────────────────────────
-    private bool showMenu = true;
+    private bool showMenu = false;
     private bool[] showPos = new bool[3];
     private bool[] showColor = new bool[3];
     private bool[] showRot = new bool[3];
