@@ -36,21 +36,17 @@ float ss(float a, float b, float x)
     return t * t * (3.0 - 2.0 * t);
 }
 
-// Versión más robusta: distancia al borde de la elipse
-float sdEllipseRobust(float2 p, float ax, float ay)
+float sdEllipse(float2 p, float ax, float ay)
 {
     float2 pa = abs(p);
     float t = UNITY_PI * 0.25;
-    for(int it = 0; it < 4; it++)
+    for (int it = 0; it < 2; it++)
     {
         float ct = cos(t), st = sin(t);
-        float2 e  = float2(ax * ct, ay * st);
-        float2 de = float2(-ax * st, ay * ct); 
-        float2 r  = pa - e;
-        float f   = dot(r, de);                
-        float df  = dot(de, de) - dot(r, float2(-ax*ct, -ay*st)); 
-        t -= f / (df + 1e-6);
-        t  = clamp(t, 0.0, UNITY_PI * 0.5);
+        float2 e = float2(ax * ct, ay * st);
+        float2 de = float2(-ax * st, ay * ct);
+        t -= dot(pa - e, de) / (dot(de, de) - dot(pa - e, float2(-ax * ct, -ay * st)) + 1e-6);
+        t = clamp(t, 0.0, UNITY_PI * 0.5);
     }
     float2 nearest = float2(ax * cos(t), ay * sin(t));
     float dist = length(pa - nearest);
@@ -68,11 +64,11 @@ float petalSDF(float2 lp, float ang, float rMid, float hLen, float hWid)
     float2 d   = lp - ctr;
     float2 ld  = float2( ca * d.x + sa * d.y,
                         -sa * d.x + ca * d.y);
-    return sdEllipseRobust(ld, hLen, hWid);
+    return sdEllipse(ld, hLen, hWid);
 }
 
 // ════════════════════════════════════════════════════════
-//  PEONÍA — 4 anillos de pétalos + pistilo + stamens
+//  PEONÍA — 3 anillos de pétalos + pistilo
 // ════════════════════════════════════════════════════════
 float4 peonyColor(float2 lp, float seed, float R)
 {
@@ -81,76 +77,52 @@ float4 peonyColor(float2 lp, float seed, float R)
     float2 rp = float2(ca0 * lp.x - sa0 * lp.y,
                        sa0 * lp.x + ca0 * lp.y);
 
-    float layers[5*4];  
-    layers[ 0]=8; layers[ 1]=R*0.72; layers[ 2]=R*0.30; layers[ 3]=R*0.14; layers[ 4]=0.0;
-    layers[ 5]=8; layers[ 6]=R*0.52; layers[ 7]=R*0.25; layers[ 8]=R*0.11; layers[ 9]=UNITY_PI/8.0;
-    layers[10]=6; layers[11]=R*0.34; layers[12]=R*0.20; layers[13]=R*0.10; layers[14]=UNITY_PI/6.0;
-    layers[15]=5; layers[16]=R*0.18; layers[17]=R*0.14; layers[18]=R*0.08; layers[19]=UNITY_PI/5.0;
+    float maskOuter = 0, maskMid = 0, maskInner = 0;
 
-    float maskOuter=0, maskMid=0, maskInner=0;
-
+    // Anillo exterior — 8 pétalos grandes
     {
-        int n=int(layers[0]);
-        float angStep = UNITY_TWO_PI / float(n);
-        float off = layers[4];
-        for(int i=0;i<8;i++){
-            if(i>=n) break;
-            float a = float(i)*angStep + off;
-            float d = petalSDF(rp, a, layers[1], layers[2], layers[3]);
+        float angStep = UNITY_TWO_PI / 8.0;
+        for (int i = 0; i < 8; i++)
+        {
+            float a = float(i) * angStep;
+            float d = petalSDF(rp, a, R * 0.72, R * 0.30, R * 0.14);
             maskOuter = max(maskOuter, 1.0 - ss(-0.004, 0.008, d));
         }
     }
+
+    // Anillo medio — 8 pétalos, rotado
     {
-        int n=int(layers[5]);
-        float angStep = UNITY_TWO_PI / float(n);
-        float off = layers[9];
-        for(int i=0;i<8;i++){
-            if(i>=n) break;
-            float a = float(i)*angStep + off;
-            float d = petalSDF(rp, a, layers[6], layers[7], layers[8]);
+        float angStep = UNITY_TWO_PI / 8.0;
+        float off = UNITY_PI / 8.0;
+        for (int i = 0; i < 8; i++)
+        {
+            float a = float(i) * angStep + off;
+            float d = petalSDF(rp, a, R * 0.52, R * 0.25, R * 0.11);
             maskMid = max(maskMid, 1.0 - ss(-0.003, 0.007, d));
         }
     }
+
+    // Anillo interior — 5 pétalos
     {
-        int n=int(layers[10]);
-        float angStep = UNITY_TWO_PI / float(n);
-        float off = layers[14];
-        for(int i=0;i<6;i++){
-            if(i>=n) break;
-            float a = float(i)*angStep + off;
-            float d = petalSDF(rp, a, layers[11], layers[12], layers[13]);
-            maskMid = max(maskMid, 1.0 - ss(-0.003, 0.006, d));
-        }
-    }
-    {
-        int n=int(layers[15]);
-        float angStep = UNITY_TWO_PI / float(n);
-        float off = layers[19];
-        for(int i=0;i<5;i++){
-            if(i>=n) break;
-            float a = float(i)*angStep + off;
-            float d = petalSDF(rp, a, layers[16], layers[17], layers[18]);
+        float angStep = UNITY_TWO_PI / 5.0;
+        float off = UNITY_PI / 5.0;
+        for (int i = 0; i < 5; i++)
+        {
+            float a = float(i) * angStep + off;
+            float d = petalSDF(rp, a, R * 0.18, R * 0.14, R * 0.08);
             maskInner = max(maskInner, 1.0 - ss(-0.002, 0.005, d));
         }
     }
 
     float dCenter = length(rp);
-    float pistilDisc  = 1.0 - ss(0.0,    R*0.06, dCenter);  
+    float pistilDisc = 1.0 - ss(0.0, R * 0.06, dCenter);
 
-    float stamens = 0;
-    for(int s=0;s<8;s++){
-        float sa2 = float(s) / 8.0 * UNITY_TWO_PI;
-        float2 sp = rp - float2(cos(sa2), sin(sa2)) * R * 0.13;
-        stamens = max(stamens, 1.0 - ss(0.0, R*0.028, length(sp)));
-    }
+    float totalMask = saturate(maskOuter + maskMid + maskInner + pistilDisc);
 
-    float totalMask = saturate(maskOuter + maskMid + maskInner + pistilDisc + stamens);
-
-    float3 col = _ColorLight.rgb;                           
-    col = lerp(col, _ColorMid.rgb,  maskMid);              
-    col = lerp(col, _ColorDark.rgb, maskInner);            
-    col = lerp(col, _ColorDark.rgb, pistilDisc);           
-    col = lerp(col, _ColorLight.rgb, stamens * 0.6);       
+    float3 col = _ColorLight.rgb;
+    col = lerp(col, _ColorMid.rgb,  maskMid);
+    col = lerp(col, _ColorDark.rgb, maskInner);
+    col = lerp(col, _ColorDark.rgb, pistilDisc);
 
     float veinAngle = atan2(rp.y, rp.x) * 8.0;
     float vein = smoothstep(0.55, 0.75, sin(veinAngle) * 0.5 + 0.5);

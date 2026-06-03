@@ -78,7 +78,7 @@ public class CameraManager : MonoBehaviour
 
         cam = go.AddComponent<Camera>();
         cam.clearFlags      = CameraClearFlags.SolidColor;
-        cam.backgroundColor = new Color(0.5f, 0.5f, 0.5f);
+        cam.backgroundColor = new Color(1f, 1f, 1f);
         cam.fieldOfView     = 60f;
         cam.nearClipPlane   = 0.1f;
         cam.farClipPlane    = 1000f;
