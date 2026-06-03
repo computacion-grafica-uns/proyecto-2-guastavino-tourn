@@ -152,7 +152,7 @@ public class LightManager : MonoBehaviour
 
     void ApplyConfigToLight(Light l, DirLightConfig cfg)
     {
-        l.enabled = cfg.enabled;
+        l.enabled = !cfg.enabled;
         l.color = cfg.color;
         l.intensity = cfg.intensity;
         l.transform.rotation = Quaternion.Euler(cfg.rotation);
@@ -169,7 +169,7 @@ public class LightManager : MonoBehaviour
 
     void ApplyConfigToLight(Light l, SpotLightConfig cfg)
     {
-        l.enabled = cfg.enabled;
+        l.enabled = !cfg.enabled;
         l.color = cfg.color;
         l.intensity = cfg.intensity;
         l.range = cfg.range;
