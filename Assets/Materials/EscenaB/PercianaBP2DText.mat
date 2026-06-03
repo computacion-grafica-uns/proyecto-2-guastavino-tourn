@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TelaBP2DText
-  m_Shader: {fileID: 4800000, guid: db0cf90687bf34a49b01330e6fb6d497, type: 3}
+  m_Name: PercianaBP2DText
+  m_Shader: {fileID: 4800000, guid: 41614e760f95a754bb29aceaffdb9527, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,16 +44,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 17c3f3722dc351c47aee724eab2fa85e, type: 3}
-        m_Scale: {x: 4, y: 4}
+        m_Texture: {fileID: 2800000, guid: 02a46215461da2445824521660c6c8fb, type: 3}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: fb1840eb8a57f084bb0a8826d5f52242, type: 3}
-        m_Scale: {x: 4, y: 4}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
@@ -65,7 +65,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlbedoMode: 1
+    - _AlbedoMode: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DMethod: 0
@@ -75,21 +75,21 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Material_n: 150
+    - _Material_n: 0
     - _Metallic: 0
     - _Mode: 0
-    - _NormalStrength: 1.95
+    - _NormalStrength: 0.6
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Roughness: 0.656
+    - _Roughness: 0.877
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientLight: {r: 0.26415092, g: 0.15759458, b: 0.0735137, a: 0.101960786}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _AmbientLight: {r: 1, g: 1, b: 1, a: 0.101960786}
+    - _BaseColor: {r: 0.78699994, g: 0.77047294, b: 0.7649639, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _F0: {r: 0.04, g: 0.04, b: 0.04, a: 1}
