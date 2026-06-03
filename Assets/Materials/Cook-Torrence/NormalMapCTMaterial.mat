@@ -45,7 +45,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 9396d5099dcbc574ab74f5d26d7da124, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -82,24 +82,24 @@ Material:
     - _Material_n: 90
     - _Metallic: 0
     - _Mode: 0
-    - _NormalStrength: 2
+    - _NormalStrength: 2.56
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Roughness: 0.5
+    - _Roughness: 0.401
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientLight: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+    - _AmbientLight: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 0, g: 0.5018867, b: 0.14457957, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorMax: {r: 0.41940188, g: 0.9622642, b: 0.4860692, a: 1}
     - _ColorMid: {r: 0.6, g: 0.54352295, b: 0.2, a: 1}
     - _ColorMin: {r: 0.2870991, g: 0.29803923, b: 0.09803922, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _F0: {r: 0.3, g: 0.3, b: 0.3, a: 1}
+    - _F0: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
     - _LightIntensity: {r: 1, g: 1, b: 1, a: 1}
     - _LightPosition_w: {r: 500, g: 0, b: 200, a: 1}
     - _MaterialKa: {r: 0.2, g: 0.2, b: 0.2, a: 0}

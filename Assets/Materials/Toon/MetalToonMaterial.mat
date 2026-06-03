@@ -27,14 +27,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 1
-    - _Bands: 3
+    - _Bands: 4.34
     - _Material_n: 32
     - _OutlineWidth: 0.5
     - _ZWrite: 1
     m_Colors:
     - _AmbientLight: {r: 1, g: 1, b: 1, a: 1}
-    - _MaterialKa: {r: 0, g: 0, b: 0, a: 0}
-    - _MaterialKd: {r: 0, g: 0, b: 0, a: 0}
-    - _MaterialKs: {r: 1, g: 1, b: 1, a: 0}
+    - _MaterialKa: {r: 0.005, g: 0.001, b: 0.001, a: 0}
+    - _MaterialKd: {r: 0.001, g: 0.001, b: 0.0001, a: 0}
+    - _MaterialKs: {r: 1, g: 1, b: 0.001, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

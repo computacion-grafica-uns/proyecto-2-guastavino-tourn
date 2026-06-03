@@ -77,7 +77,7 @@ Material:
     - _BranchDensity: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DMethod: 0
+    - _DMethod: 2
     - _DetailBlend: 0.9
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -97,7 +97,7 @@ Material:
     - _PatternScale: 4
     - _PeonyRadius: 0.26
     - _PeonyScale: 0.096
-    - _Roughness: 0.17
+    - _Roughness: 0.196
     - _ScrollDensity: 0.12
     - _SmallOffset: 0.193
     - _SmallRadius: 0.119

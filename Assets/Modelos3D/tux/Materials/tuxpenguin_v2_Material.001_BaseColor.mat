@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 2DTextCTMaterial
-  m_Shader: {fileID: 4800000, guid: 2116f0dc5ccfac74086c46fcf0f98323, type: 3}
+  m_Name: tuxpenguin_v2_Material.001_BaseColor
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,8 +44,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ac07059f07c46284f8b4651f7fd03666, type: 3}
-        m_Scale: {x: 6, y: 6}
+        m_Texture: {fileID: 2800000, guid: 7a20c0297575c3646ad9896e6e6df2cc, type: 3}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
@@ -63,32 +63,21 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DMethod: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _GMethod: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Material_n: 100
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Roughness: 0.616
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientLight: {r: 1, g: 1, b: 1, a: 0.101960786}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _F0: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 1}
-    - _LightIntensity: {r: 1, g: 1, b: 1, a: 1}
-    - _LightPosition_w: {r: 0, g: 5, b: 0, a: 1}
-    - _MaterialKa: {r: 0.2, g: 0.2, b: 0.2, a: 0}
-    - _MaterialKd: {r: 0.6, g: 0.6, b: 0.6, a: 0}
-    - _MaterialKs: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
