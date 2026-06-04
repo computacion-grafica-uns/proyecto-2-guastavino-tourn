@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pisoExteriorBP2DText
+  m_Name: PisoViejoBP2DText
   m_Shader: {fileID: 4800000, guid: db0cf90687bf34a49b01330e6fb6d497, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -44,16 +44,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: d390db092c1c8624da2498b596b8ccbc, type: 3}
-        m_Scale: {x: 1.5, y: 1.5}
+        m_Texture: {fileID: 2800000, guid: a8f630e83668e4e4e898d1c4097e5379, type: 3}
+        m_Scale: {x: 0.5, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: b38181bc9905f564fbc7fc85ad320b49, type: 3}
-        m_Scale: {x: 1.5, y: 1.5}
+        m_Texture: {fileID: 2800000, guid: 0581dc7fdfa636b448b2a1dba7b1fb94, type: 3}
+        m_Scale: {x: 0.5, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
@@ -78,10 +78,10 @@ Material:
     - _Material_n: 150
     - _Metallic: 0
     - _Mode: 0
-    - _NormalStrength: 1.95
+    - _NormalStrength: 0.36
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Roughness: 0.656
+    - _Roughness: 0.88
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

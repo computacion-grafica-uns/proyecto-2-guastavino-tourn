@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BookBP2DText
-  m_Shader: {fileID: 4800000, guid: 41614e760f95a754bb29aceaffdb9527, type: 3}
+  m_Shader: {fileID: 4800000, guid: 2116f0dc5ccfac74086c46fcf0f98323, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -81,7 +81,7 @@ Material:
     - _NormalStrength: 0.6
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Roughness: 0.877
+    - _Roughness: 0.3
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

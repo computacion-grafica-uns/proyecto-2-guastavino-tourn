@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ParedCocinaBP2DText
-  m_Shader: {fileID: 4800000, guid: 41614e760f95a754bb29aceaffdb9527, type: 3}
+  m_Shader: {fileID: 4800000, guid: db0cf90687bf34a49b01330e6fb6d497, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,13 +44,17 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 3ee0bda32f6ef0a40aeb666e7f1d9f55, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: f227a0c7c1ecd0e4c8c78ecfd9861870, type: 3}
+        m_Scale: {x: 0.7, y: 0.7}
+        m_Offset: {x: 0.1, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 6e922c44bdb3acd4cbd32c3039eb84a2, type: 3}
+        m_Scale: {x: 0.7, y: 0.7}
+        m_Offset: {x: 0.1, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -61,18 +65,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlbedoMode: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
+    - _DMethod: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _GMethod: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Material_n: 32
     - _Metallic: 0
     - _Mode: 0
+    - _NormalStrength: 2.12
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Roughness: 0.32
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -80,8 +89,10 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _AmbientLight: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _F0: {r: 0.04, g: 0.04, b: 0.04, a: 1}
     - _MaterialKa: {r: 0.2, g: 0.2, b: 0.2, a: 0}
     - _MaterialKd: {r: 0.6, g: 0.6, b: 0.6, a: 0}
     - _MaterialKs: {r: 1, g: 1, b: 1, a: 0}
