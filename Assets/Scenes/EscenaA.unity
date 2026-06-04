@@ -454,7 +454,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 15e3bc90abe9d4a4bb766f7c2907a801, type: 2}
   - {fileID: 2100000, guid: fbc808a0be7ac414fb64f10f7fdd108f, type: 2}
   - {fileID: 2100000, guid: 7aea08f0502a95642ad8ba092bb6dd28, type: 2}
-  - {fileID: 2100000, guid: 29feaf3bd3b9ca7499c30d5b7a3df350, type: 2}
+  - {fileID: 2100000, guid: 65190844964f01440bc434e4baa9e31d, type: 2}
   toonMaterials:
   - {fileID: 2100000, guid: 847b6d6420b021245b89a06ee1f3e951, type: 2}
   - {fileID: 2100000, guid: e2e7bd13fba427949b13143247f8b9b3, type: 2}
