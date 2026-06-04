@@ -330,7 +330,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -905,12 +905,12 @@ MonoBehaviour:
     range: 5000
   spotConfig:
     enabled: 1
-    position: {x: 0.65, y: 1, z: 0.85}
-    rotation: {x: 0, y: 0, z: 0}
+    position: {x: 0.64, y: 1.1, z: -0.83}
+    rotation: {x: 90, y: 0, z: 0}
     color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     intensity: 1
     range: 5000
-    spotAngle: 60
+    spotAngle: 120
 --- !u!4 &530792952 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 561ad1f6c1999904d8b6dcdaa842524c, type: 3}
@@ -1563,7 +1563,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1772,7 +1772,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1939,7 +1939,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
