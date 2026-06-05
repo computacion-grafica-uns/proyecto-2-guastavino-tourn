@@ -283,10 +283,15 @@ MonoBehaviour:
   orbitOffsetFromCenter: {x: 0, y: 0, z: 0}
   focusTargets:
   - {fileID: 361431192}
-  - {fileID: 1895809381984997992}
-  - {fileID: 5886723163331343932}
-  - {fileID: 5596834610712558109}
-  - {fileID: 5876787133410582916}
+  - {fileID: 1408404629083686366}
+  - {fileID: 72876606}
+  - {fileID: 2011591123}
+  - {fileID: 1853969855}
+  - {fileID: 1803166742}
+  - {fileID: 1906355874}
+  - {fileID: 898302534}
+  - {fileID: 1660738669377306109}
+  - {fileID: 2609579183146125796}
   objectManager: {fileID: 0}
   initialFPMoveSpeed: 5
   initialFPRotSpeed: 100
@@ -14506,7 +14511,7 @@ Transform:
   m_GameObject: {fileID: 835246761469350023}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
